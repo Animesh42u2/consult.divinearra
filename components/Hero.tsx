@@ -1,21 +1,44 @@
 // components/Hero.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Hero() {
   const [angle, setAngle] = useState(0);
+  const reducedMotion = useRef(false);
 
   useEffect(() => {
-    const t = setInterval(() => setAngle((a) => (a + 0.3) % 360), 16);
-    return () => clearInterval(t);
+    reducedMotion.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (reducedMotion.current) return;
+
+    let raf: number;
+    let last = performance.now();
+
+    const tick = (now: number) => {
+      const dt = now - last;
+      last = now;
+      // ~0.3deg per 16ms frame, framerate-independent
+      setAngle((a) => (a + (0.3 * dt) / 16) % 360);
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   return (
     <section className="hero">
       <style jsx>{`
+        * {
+          box-sizing: border-box;
+        }
+
         .hero {
           position: relative;
+          width: 100%;
           background: radial-gradient(
               ellipse at 75% 30%,
               rgba(244, 197, 66, 0.12),
@@ -28,7 +51,8 @@ export default function Hero() {
               var(--maroon) 100%
             );
           overflow: hidden;
-          padding: 104px 6vw 64px;
+          padding: clamp(56px, 9vw, 104px) clamp(20px, 6vw, 80px)
+            clamp(40px, 6vw, 64px);
         }
 
         .starfield {
@@ -66,26 +90,27 @@ export default function Hero() {
           position: absolute;
           pointer-events: none;
           z-index: 0;
+          max-width: none;
           filter: brightness(0) saturate(100%) invert(78%) sepia(46%)
             saturate(620%) hue-rotate(1deg) brightness(103%);
         }
         .lotus--bl {
           bottom: -6%;
           left: -6%;
-          width: clamp(180px, 18vw, 280px);
+          width: clamp(130px, 18vw, 280px);
           opacity: 0.4;
         }
         .lotus--br {
           bottom: -6%;
           right: -6%;
-          width: clamp(180px, 18vw, 280px);
+          width: clamp(130px, 18vw, 280px);
           opacity: 0.4;
           transform: scaleX(-1);
         }
         .lotus--tr {
           top: -4%;
           right: -3%;
-          width: clamp(160px, 16vw, 240px);
+          width: clamp(100px, 16vw, 240px);
           opacity: 0.35;
           transform: rotate(180deg);
         }
@@ -93,12 +118,17 @@ export default function Hero() {
         .hero-inner {
           position: relative;
           z-index: 1;
+          width: 100%;
           max-width: 1440px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: 1.05fr 0.95fr;
-          gap: 56px;
+          grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+          gap: clamp(28px, 5vw, 56px);
           align-items: center;
+        }
+
+        .copy {
+          min-width: 0;
         }
 
         .eyebrow {
@@ -107,7 +137,7 @@ export default function Hero() {
           gap: 10px;
           color: var(--gold);
           font-weight: 600;
-          font-size: clamp(13px, 1vw, 15px);
+          font-size: clamp(12px, 1vw, 15px);
           letter-spacing: 0.14em;
           margin-bottom: 22px;
         }
@@ -116,10 +146,11 @@ export default function Hero() {
           font-family: var(--font-playfair), serif;
           font-weight: 800;
           color: var(--cream);
-          font-size: clamp(34px, 5vw, 64px);
+          font-size: clamp(30px, 5vw, 64px);
           line-height: 1.12;
-          margin-bottom: 6px;
+          margin: 0 0 6px;
           text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
+          overflow-wrap: break-word;
         }
         .headline .accent {
           color: var(--gold);
@@ -132,31 +163,34 @@ export default function Hero() {
 
         .subtext {
           color: rgba(255, 248, 231, 0.82);
-          font-size: clamp(15px, 1.5vw, 18px);
+          font-size: clamp(14px, 1.5vw, 18px);
           line-height: 1.7;
           max-width: 520px;
-          margin: 24px 0 36px;
+          margin: 20px 0 32px;
         }
 
         .cta {
           display: inline-flex;
           align-items: center;
+          justify-content: center;
           gap: 10px;
           background: linear-gradient(135deg, #ffdd7a, var(--gold));
           color: var(--deep-brown);
           font-weight: 700;
-          font-size: clamp(15px, 1.1vw, 17px);
-          padding: 17px 32px;
+          font-size: clamp(14px, 1.1vw, 17px);
+          padding: clamp(14px, 1.6vw, 17px) clamp(22px, 3vw, 32px);
           border-radius: 8px;
           text-decoration: none;
           box-shadow: 0 10px 24px rgba(244, 197, 66, 0.28);
           transition: transform 0.25s ease, box-shadow 0.25s ease;
+          max-width: 100%;
         }
         .cta:hover {
           transform: translateY(-2px);
           box-shadow: 0 14px 30px rgba(244, 197, 66, 0.4);
         }
         .cta svg {
+          flex-shrink: 0;
           transition: transform 0.25s ease;
         }
         .cta:hover svg {
@@ -165,16 +199,11 @@ export default function Hero() {
 
         .stats {
           display: flex;
-          flex-wrap: nowrap;
-          gap: 24px;
-          margin-top: 48px;
-          padding-top: 30px;
+          flex-wrap: wrap;
+          gap: clamp(14px, 2vw, 24px);
+          margin-top: clamp(32px, 5vw, 48px);
+          padding-top: clamp(20px, 3vw, 30px);
           border-top: 1px solid rgba(255, 248, 231, 0.18);
-          overflow-x: auto;
-          scrollbar-width: none;
-        }
-        .stats::-webkit-scrollbar {
-          display: none;
         }
         .stat {
           display: flex;
@@ -194,12 +223,13 @@ export default function Hero() {
         .wheel-wrap {
           position: relative;
           width: 100%;
-          aspect-ratio: 1 / 1;
           max-width: 640px;
+          aspect-ratio: 1 / 1;
           margin: 0 auto;
           display: flex;
           align-items: center;
           justify-content: center;
+          min-width: 0;
         }
         .chakra-bg {
           position: absolute;
@@ -207,10 +237,12 @@ export default function Hero() {
           left: 50%;
           width: 118%;
           height: 118%;
+          max-width: none;
           object-fit: contain;
           opacity: 0.5;
           pointer-events: none;
           z-index: 0;
+          will-change: transform;
         }
         .glow {
           position: absolute;
@@ -242,6 +274,7 @@ export default function Hero() {
         .hero-portrait {
           position: relative;
           width: 72%;
+          max-width: 100%;
           height: auto;
           z-index: 2;
           filter: drop-shadow(0 0 30px rgba(244, 197, 66, 0.25));
@@ -264,22 +297,23 @@ export default function Hero() {
         /* Small laptops / tablets landscape */
         @media (max-width: 1100px) {
           .hero-inner {
-            gap: 40px;
+            gap: 36px;
           }
           .wheel-wrap {
-            max-width: 480px;
+            max-width: 460px;
           }
         }
 
         /* Tablets portrait */
         @media (max-width: 900px) {
-          .hero {
-            padding: 72px 6vw 48px;
-          }
           .hero-inner {
             grid-template-columns: 1fr;
-            gap: 44px;
+            gap: 40px;
             text-align: center;
+          }
+          .copy {
+            max-width: 640px;
+            margin: 0 auto;
           }
           .eyebrow {
             justify-content: center;
@@ -292,54 +326,82 @@ export default function Hero() {
             margin: 0 auto;
           }
           .stats {
-            justify-content: flex-start;
+            justify-content: center;
           }
           .wheel-wrap {
             order: -1;
-            max-width: 440px;
+            max-width: 420px;
           }
         }
 
         /* Phones */
         @media (max-width: 520px) {
-          .hero {
-            padding: 56px 6vw 40px;
-          }
           .lotus--tr {
-            width: clamp(110px, 24vw, 160px);
+            width: clamp(90px, 24vw, 160px);
           }
           .lotus--bl,
           .lotus--br {
-            width: clamp(130px, 26vw, 190px);
-          }
-          .stats {
-            gap: 16px;
+            width: clamp(110px, 26vw, 190px);
           }
           .cta {
             width: 100%;
-            justify-content: center;
-            padding: 16px 26px;
           }
           .wheel-wrap {
-            max-width: 340px;
+            max-width: 320px;
           }
         }
 
         /* Very small phones */
         @media (max-width: 380px) {
           .headline {
-            font-size: clamp(28px, 8vw, 36px);
+            font-size: clamp(26px, 8vw, 34px);
           }
           .subtext {
             font-size: 14px;
           }
           .stats {
-            flex-direction: column;
-            align-items: flex-start;
-            overflow-x: visible;
+            gap: 12px 20px;
           }
           .wheel-wrap {
-            max-width: 300px;
+            max-width: 260px;
+          }
+        }
+
+        /* Short / landscape phones */
+        @media (max-height: 480px) and (orientation: landscape) {
+          .hero {
+            padding-top: 32px;
+            padding-bottom: 24px;
+          }
+          .hero-inner {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+            text-align: left;
+          }
+          .copy {
+            margin: 0;
+          }
+          .eyebrow {
+            justify-content: flex-start;
+          }
+          .subtext {
+            margin-left: 0;
+          }
+          .cta {
+            margin: 0;
+            width: auto;
+          }
+          .stats {
+            justify-content: flex-start;
+          }
+          .wheel-wrap {
+            order: 0;
+            max-width: 220px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .chakra-bg {
+            transition: none;
           }
         }
       `}</style>
@@ -352,7 +414,7 @@ export default function Hero() {
 
       <div className="hero-inner">
         {/* LEFT: copy */}
-        <div>
+        <div className="copy">
           <div className="eyebrow">Ancient Wisdom • Modern Guidance</div>
 
           <h1 className="headline">
