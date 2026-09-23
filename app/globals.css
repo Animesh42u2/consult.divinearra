@@ -1,0 +1,29 @@
+/* app/globals.css */
+
+:root {
+  --royal-red: #8b0000;
+  --maroon: #5c0a0a;
+  --gold: #f4c542;
+  --light-gold: #f5d95a;
+  --cream: #fff8e7;
+  --deep-brown: #2b160f;
+  --soft-cream-gold: #fff1c7;
+
+  --font-body: var(--font-poppins), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--deep-brown);
+  background: var(--cream);
+}
+
+a {
+  color: inherit;
+}
