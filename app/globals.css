@@ -19,7 +19,7 @@
 }
 
 html {
-  background: var(--maroon);
+  /* background: var(--maroon);  ← remove this line */
 }
 
 body {
