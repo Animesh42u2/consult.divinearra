@@ -11,8 +11,8 @@ const CONSULTATION = {
   title: 'Personal Vedic Consultation',
   tagline: 'A one-on-one session with our astrologer covering career, love, health, and life direction.',
   image: '/hero.png', // swap for a real consultation photo/graphic if you have one
-  originalPrice: '₹1,999',
-  discountedPrice: '₹799',
+  originalPrice: '₹2,499',
+  discountedPrice: '₹750',
   features: [
     { label: '45-minute live video/audio session', included: true },
     { label: 'Personalized birth chart analysis', included: true },
