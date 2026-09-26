@@ -6,6 +6,39 @@ import { useEffect, useRef, useState } from "react";
 export default function Hero() {
   const [angle, setAngle] = useState(0);
   const reducedMotion = useRef(false);
+  const [loaded, setLoaded] = useState({
+    bl: false,
+    br: false,
+    tr: false,
+    hero: false,
+    chakra: false,
+  });
+
+  const blRef = useRef<HTMLImageElement>(null);
+  const brRef = useRef<HTMLImageElement>(null);
+  const trRef = useRef<HTMLImageElement>(null);
+  const heroRef = useRef<HTMLImageElement>(null);
+  const chakraRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const refs = {
+      bl: blRef,
+      br: brRef,
+      tr: trRef,
+      hero: heroRef,
+      chakra: chakraRef,
+    } as const;
+
+    setLoaded((prev) => {
+      const next = { ...prev };
+      (Object.keys(refs) as (keyof typeof refs)[]).forEach((key) => {
+        if (refs[key].current?.complete) {
+          next[key] = true;
+        }
+      });
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     reducedMotion.current = window.matchMedia(
@@ -91,6 +124,8 @@ export default function Hero() {
           pointer-events: none;
           z-index: 0;
           max-width: none;
+          opacity: 0;
+          transition: opacity 0.6s ease;
           filter: brightness(0) saturate(100%) invert(78%) sepia(46%)
             saturate(620%) hue-rotate(1deg) brightness(103%);
         }
@@ -98,21 +133,27 @@ export default function Hero() {
           bottom: -6%;
           left: -6%;
           width: clamp(130px, 18vw, 280px);
+        }
+        .lotus--bl.is-loaded {
           opacity: 0.4;
         }
         .lotus--br {
           bottom: -6%;
           right: -6%;
           width: clamp(130px, 18vw, 280px);
-          opacity: 0.4;
           transform: scaleX(-1);
+        }
+        .lotus--br.is-loaded {
+          opacity: 0.4;
         }
         .lotus--tr {
           top: -4%;
           right: -3%;
           width: clamp(100px, 16vw, 240px);
-          opacity: 0.35;
           transform: rotate(180deg);
+        }
+        .lotus--tr.is-loaded {
+          opacity: 0.35;
         }
 
         .hero-inner {
@@ -239,10 +280,14 @@ export default function Hero() {
           height: 118%;
           max-width: none;
           object-fit: contain;
-          opacity: 0.5;
+          opacity: 0;
           pointer-events: none;
           z-index: 0;
           will-change: transform;
+          transition: opacity 0.6s ease;
+        }
+        .chakra-bg.is-loaded {
+          opacity: 0.5;
         }
         .glow {
           position: absolute;
@@ -257,28 +302,19 @@ export default function Hero() {
           filter: blur(2px);
           z-index: 1;
         }
-        .ring-outer {
-          position: absolute;
-          inset: 0;
-          border-radius: 50%;
-          border: 1px solid rgba(244, 197, 66, 0.35);
-          z-index: 1;
-        }
-        .ring-inner {
-          position: absolute;
-          inset: 14%;
-          border-radius: 50%;
-          border: 1px solid rgba(244, 197, 66, 0.25);
-          z-index: 1;
-        }
         .hero-portrait {
           position: relative;
           width: 72%;
           max-width: 100%;
           height: auto;
           z-index: 2;
+          opacity: 0;
           filter: drop-shadow(0 0 30px rgba(244, 197, 66, 0.25));
           object-fit: contain;
+          transition: opacity 0.6s ease;
+        }
+        .hero-portrait.is-loaded {
+          opacity: 1;
         }
 
         /* ---------- Responsive ---------- */
@@ -408,9 +444,34 @@ export default function Hero() {
 
       <div className="starfield" />
 
-      <img src="/lotus.png" alt="" aria-hidden="true" className="lotus lotus--bl" />
-      <img src="/lotus.png" alt="" aria-hidden="true" className="lotus lotus--br" />
-      <img src="/lotus.png" alt="" aria-hidden="true" className="lotus lotus--tr" />
+      {/* eslint-disable @next/next/no-img-element */}
+      <img
+        ref={blRef}
+        src="/lotus.png"
+        alt=""
+        aria-hidden="true"
+        className="lotus lotus--bl"
+        style={{ opacity: loaded.bl ? 0.4 : 0 }}
+        onLoad={() => setLoaded((s) => ({ ...s, bl: true }))}
+      />
+      <img
+        ref={brRef}
+        src="/lotus.png"
+        alt=""
+        aria-hidden="true"
+        className="lotus lotus--br"
+        style={{ opacity: loaded.br ? 0.4 : 0 }}
+        onLoad={() => setLoaded((s) => ({ ...s, br: true }))}
+      />
+      <img
+        ref={trRef}
+        src="/lotus.png"
+        alt=""
+        aria-hidden="true"
+        className="lotus lotus--tr"
+        style={{ opacity: loaded.tr ? 0.35 : 0 }}
+        onLoad={() => setLoaded((s) => ({ ...s, tr: true }))}
+      />
 
       <div className="hero-inner">
         {/* LEFT: copy */}
@@ -497,16 +558,27 @@ export default function Hero() {
         {/* RIGHT: zodiac wheel + rotating chakra background + hero image */}
         <div className="wheel-wrap">
           <img
+            ref={chakraRef}
             src="/chakra.png"
             alt=""
             aria-hidden="true"
             className="chakra-bg"
-            style={{ transform: `translate(-50%, -50%) rotate(${angle}deg)` }}
+            style={{
+              transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+              opacity: loaded.chakra ? 0.5 : 0,
+            }}
+            onLoad={() => setLoaded((s) => ({ ...s, chakra: true }))}
           />
           <div className="glow" />
-          <div className="ring-outer" />
-          <div className="ring-inner" />
-          <img src="/hero.png" alt="Astrologer" className="hero-portrait" />
+          <img
+            ref={heroRef}
+            src="/hero.png"
+            alt="Astrologer"
+            className="hero-portrait"
+            style={{ opacity: loaded.hero ? 1 : 0 }}
+            onLoad={() => setLoaded((s) => ({ ...s, hero: true }))}
+          />
+          {/* eslint-enable @next/next/no-img-element */}
         </div>
       </div>
     </section>

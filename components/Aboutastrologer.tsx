@@ -17,7 +17,7 @@ export default function AboutAstrologer() {
         <div className="photo-wrap">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="baba.jpg"
+            src="/baba.jpg"
             alt="Astrologer portrait"
           />
         </div>
@@ -64,7 +64,7 @@ export default function AboutAstrologer() {
           </p>
           <div className="quote-attr">— Team Divine Arra</div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="logo.jpeg" alt="" className="quote-logo" />
+          <img src="/logo.jpeg" alt="" className="quote-logo" />
         </div>
       </div>
 

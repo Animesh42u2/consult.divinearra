@@ -18,6 +18,10 @@
   padding: 0;
 }
 
+html {
+  background: var(--maroon);
+}
+
 body {
   font-family: var(--font-body);
   color: var(--deep-brown);

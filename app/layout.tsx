@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
+import AppShell from "../components/AppShell";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -33,7 +34,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${poppins.variable}`}>
-      <body>{children}</body>
+      <head>
+        {/* Preload the above-the-fold hero images so they start
+            downloading immediately, before React even hydrates */}
+        <link rel="preload" as="image" href="/hero.png" fetchPriority="high" />
+        <link rel="preload" as="image" href="/lotus.png" fetchPriority="low" />
+        <link rel="preload" as="image" href="/chakra.png" fetchPriority="low" />
+      </head>
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }

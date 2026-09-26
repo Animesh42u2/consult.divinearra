@@ -65,12 +65,26 @@ export default function WhyChooseUs() {
     <section className="why">
       <div className="why-inner">
         <div className="why-head">
-          <span className="vel-wrap">
-            <Image src="/vel.png" alt="" width={70} height={26} className="vel" />
+          <span className="vel-wrap" style={{ position: "relative" }}>
+            <Image
+              src="/vel.png"
+              alt=""
+              fill
+              sizes="70px"
+              className="vel"
+              style={{ objectFit: "contain" }}
+            />
           </span>
           <h2>Why Choose Divine Arra?</h2>
-          <span className="vel-wrap right">
-            <Image src="/vel.png" alt="" width={70} height={26} className="vel flip" />
+          <span className="vel-wrap right" style={{ position: "relative" }}>
+            <Image
+              src="/vel.png"
+              alt=""
+              fill
+              sizes="70px"
+              className="vel flip"
+              style={{ objectFit: "contain" }}
+            />
           </span>
         </div>
 
@@ -121,8 +135,7 @@ export default function WhyChooseUs() {
         }
         .why-head :global(.vel) {
           width: 100%;
-          height: auto;
-          object-fit: contain;
+          height: 100%;
         }
         .why-head :global(.flip) {
           transform: scaleX(-1);

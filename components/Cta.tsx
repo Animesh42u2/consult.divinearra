@@ -1,7 +1,12 @@
 // components/Cta.tsx
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
+
 export default function CTA() {
+  const [hovered, setHovered] = useState(false);
+
   return (
     <section className="cta">
       <span className="mandala left" aria-hidden="true" />
@@ -10,7 +15,31 @@ export default function CTA() {
       <div className="cta-inner">
         <h2>Your Future Deserves Clarity</h2>
         <p>Take the first step towards a better tomorrow</p>
-        <a href="#" className="btn-primary">
+        <Link
+          href="/checkout"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "clamp(6px, 2vw, 10px)",
+            background: "var(--gold)",
+            color: "var(--deep-brown)",
+            fontWeight: 600,
+            fontSize: "clamp(13px, 3.6vw, 15px)",
+            padding: "clamp(12px, 3.6vw, 16px) clamp(20px, 6vw, 32px)",
+            borderRadius: 8,
+            textDecoration: "none",
+            textAlign: "center",
+            maxWidth: "100%",
+            boxShadow: hovered
+              ? "0 14px 28px rgba(244, 197, 66, 0.35)"
+              : "0 10px 24px rgba(244, 197, 66, 0.25)",
+            transform: hovered ? "translateY(-2px)" : "translateY(0)",
+            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+          }}
+        >
           Book Your Consultation Now
           <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
             <path
@@ -21,7 +50,7 @@ export default function CTA() {
               strokeLinejoin="round"
             />
           </svg>
-        </a>
+        </Link>
       </div>
 
       <style jsx>{`
@@ -87,24 +116,6 @@ export default function CTA() {
           color: rgba(255, 248, 231, 0.8);
           font-size: 16px;
           margin-bottom: 34px;
-        }
-        .btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          background: var(--gold);
-          color: var(--deep-brown);
-          font-weight: 600;
-          font-size: 15px;
-          padding: 16px 32px;
-          border-radius: 8px;
-          text-decoration: none;
-          box-shadow: 0 10px 24px rgba(244, 197, 66, 0.25);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 14px 28px rgba(244, 197, 66, 0.35);
         }
       `}</style>
     </section>
