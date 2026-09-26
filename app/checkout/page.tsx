@@ -14,7 +14,7 @@ const CONSULTATION = {
   originalPrice: '₹2,499',
   discountedPrice: '₹750',
   features: [
-    { label: '45-minute live video/audio session', included: true },
+    { label: '30-minute live video/audio session', included: true },
     { label: 'Personalized birth chart analysis', included: true },
     { label: 'Written summary after the call', included: true },
     { label: 'Follow-up questions via WhatsApp (7 days)', included: true },
