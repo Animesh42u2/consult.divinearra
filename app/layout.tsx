@@ -2,7 +2,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
-import AppShell from "../components/AppShell";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -42,7 +41,6 @@ export default function RootLayout({
         <link rel="preload" as="image" href="/chakra.png" fetchPriority="low" />
       </head>
       <body>
-        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
