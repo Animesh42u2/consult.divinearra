@@ -3,6 +3,36 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const featureBadges = [
+  {
+    label: "Private & Confidential",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+        <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" strokeWidth="2" />
+        <path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    label: "Personalized Guidance",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+        <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
+        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    label: "Vedic Astrology Based",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+        <path d="M12 7v5l3.5 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+];
+
 export default function Hero() {
   const [angle, setAngle] = useState(0);
   const reducedMotion = useRef(false);
@@ -61,6 +91,11 @@ export default function Hero() {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  const scrollToConsultation = (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.getElementById("consultation")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section className="hero">
@@ -163,7 +198,7 @@ export default function Hero() {
           max-width: 1440px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+          grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
           gap: clamp(28px, 5vw, 56px);
           align-items: center;
         }
@@ -175,20 +210,31 @@ export default function Hero() {
         .eyebrow {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
           color: var(--gold);
           font-weight: 600;
-          font-size: clamp(12px, 1vw, 15px);
-          letter-spacing: 0.14em;
+          font-size: clamp(11px, 1vw, 13px);
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          padding: 8px 16px;
+          border: 1px solid rgba(244, 197, 66, 0.4);
+          border-radius: 999px;
           margin-bottom: 22px;
+        }
+        .eyebrow .dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--gold);
+          flex-shrink: 0;
         }
 
         .headline {
           font-family: var(--font-playfair), serif;
           font-weight: 800;
           color: var(--cream);
-          font-size: clamp(30px, 5vw, 64px);
-          line-height: 1.12;
+          font-size: clamp(30px, 5vw, 60px);
+          line-height: 1.15;
           margin: 0 0 6px;
           text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
           overflow-wrap: break-word;
@@ -207,7 +253,42 @@ export default function Hero() {
           font-size: clamp(14px, 1.5vw, 18px);
           line-height: 1.7;
           max-width: 520px;
-          margin: 20px 0 32px;
+          margin: 20px 0 28px;
+        }
+
+        .feature-badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: clamp(8px, 1.4vw, 16px);
+          margin-bottom: clamp(28px, 4vw, 36px);
+        }
+        .feature-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          color: rgba(255, 248, 231, 0.9);
+          font-size: clamp(11px, 0.95vw, 13px);
+          font-weight: 600;
+          white-space: nowrap;
+        }
+        .feature-badge-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          background: rgba(244, 197, 66, 0.15);
+          border: 1px solid var(--gold);
+          color: var(--gold);
+          flex-shrink: 0;
+        }
+
+        .cta-row {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: clamp(16px, 2.4vw, 28px);
         }
 
         .cta {
@@ -236,29 +317,6 @@ export default function Hero() {
         }
         .cta:hover svg {
           transform: translateX(3px);
-        }
-
-        .stats {
-          display: flex;
-          flex-wrap: wrap;
-          gap: clamp(14px, 2vw, 24px);
-          margin-top: clamp(32px, 5vw, 48px);
-          padding-top: clamp(20px, 3vw, 30px);
-          border-top: 1px solid rgba(255, 248, 231, 0.18);
-        }
-        .stat {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: rgba(255, 248, 231, 0.9);
-          font-size: clamp(12px, 1.05vw, 15px);
-          font-weight: 500;
-          white-space: nowrap;
-          flex-shrink: 0;
-        }
-        .stat svg {
-          color: var(--gold);
-          flex-shrink: 0;
         }
 
         .wheel-wrap {
@@ -317,6 +375,54 @@ export default function Hero() {
           opacity: 1;
         }
 
+        .stat-cards {
+          display: flex;
+          align-items: stretch;
+          background: rgba(20, 8, 8, 0.82);
+          backdrop-filter: blur(6px);
+          border: 1px solid rgba(244, 197, 66, 0.4);
+          border-radius: 14px;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+        .stat-card {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 16px;
+          white-space: nowrap;
+        }
+        .stat-card + .stat-card {
+          border-left: 1px solid rgba(244, 197, 66, 0.25);
+        }
+        .stat-card-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background: rgba(244, 197, 66, 0.18);
+          color: var(--gold);
+          flex-shrink: 0;
+        }
+        .stat-card-value {
+          color: var(--cream);
+          font-weight: 700;
+          font-size: clamp(13px, 1.1vw, 16px);
+          line-height: 1.2;
+        }
+        .stat-card-label {
+          color: rgba(255, 248, 231, 0.7);
+          font-size: clamp(10px, 0.85vw, 12px);
+          line-height: 1.2;
+        }
+        .stars {
+          color: var(--gold);
+          font-size: 11px;
+          letter-spacing: 1px;
+        }
+
         /* ---------- Responsive ---------- */
 
         /* Large desktop / wide monitors */
@@ -352,21 +458,25 @@ export default function Hero() {
             margin: 0 auto;
           }
           .eyebrow {
-            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
           }
           .subtext {
             margin-left: auto;
             margin-right: auto;
           }
-          .cta {
-            margin: 0 auto;
+          .feature-badges {
+            justify-content: center;
           }
-          .stats {
+          .cta-row {
             justify-content: center;
           }
           .wheel-wrap {
             order: -1;
             max-width: 420px;
+          }
+          .stat-cards {
+            margin: 4px auto 0;
           }
         }
 
@@ -379,11 +489,23 @@ export default function Hero() {
           .lotus--br {
             width: clamp(110px, 26vw, 190px);
           }
+          .cta-row {
+            justify-content: center;
+          }
           .cta {
             width: 100%;
+            max-width: 360px;
           }
           .wheel-wrap {
             max-width: 320px;
+          }
+          .stat-cards {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .stat-card + .stat-card {
+            border-left: none;
+            border-top: 1px solid rgba(244, 197, 66, 0.25);
           }
         }
 
@@ -394,9 +516,6 @@ export default function Hero() {
           }
           .subtext {
             font-size: 14px;
-          }
-          .stats {
-            gap: 12px 20px;
           }
           .wheel-wrap {
             max-width: 260px;
@@ -417,16 +536,13 @@ export default function Hero() {
             margin: 0;
           }
           .eyebrow {
-            justify-content: flex-start;
+            margin-left: 0;
           }
           .subtext {
             margin-left: 0;
           }
-          .cta {
-            margin: 0;
-            width: auto;
-          }
-          .stats {
+          .feature-badges,
+          .cta-row {
             justify-content: flex-start;
           }
           .wheel-wrap {
@@ -476,82 +592,45 @@ export default function Hero() {
       <div className="hero-inner">
         {/* LEFT: copy */}
         <div className="copy">
-          <div className="eyebrow">Ancient Wisdom • Modern Guidance</div>
+          <div className="eyebrow">
+            <span className="dot" />
+            Personalized Vedic Astrology Consultation
+          </div>
 
           <h1 className="headline">
-            Your Kundli Holds
-            <span className="accent">the Answers.</span>
+            Your Life Questions Deserve a
+            <span className="accent">Personalized Answer.</span>
           </h1>
 
           <p className="subtext">
-            Get clarity in Love, Career, Money, Health and Life&apos;s
-            important decisions with expert guidance.
+            A private 1-on-1 consultation based on your Kundali, your
+            questions and the areas that matter most to you.
           </p>
 
-          <a href="#" className="cta">
-            Book Your Consultation
-            <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-              <path
-                d="M5 12h14M13 6l6 6-6 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
+          <div className="feature-badges">
+            {featureBadges.map((badge) => (
+              <span className="feature-badge" key={badge.label}>
+                <span className="feature-badge-icon">{badge.icon}</span>
+                {badge.label}
+              </span>
+            ))}
+          </div>
 
-          {/* Stats row */}
-          <div className="stats">
-            <div className="stat">
-              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <div className="cta-row">
+            <a href="#consultation" className="cta" onClick={scrollToConsultation}>
+              Book My Consultation
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <path
-                  d="M12 2l7 3v6c0 5-3.4 8.4-7 10-3.6-1.6-7-5-7-10V5l7-3z"
+                  d="M5 12h14M13 6l6 6-6 6"
                   stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-              </svg>
-              100% Confidential
-            </div>
-            <div className="stat">
-              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-                <circle cx="9" cy="8" r="3" stroke="currentColor" strokeWidth="1.6" />
-                <circle cx="17" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6" />
-                <path
-                  d="M3 19c0-3 2.7-5 6-5s6 2 6 5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <path
-                  d="M15 14.2c2.6.4 4.3 2.2 4.3 4.8"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-              </svg>
-              10,000+ Happy Clients
-            </div>
-            <div className="stat">
-              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-                <path
-                  d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6L12 3z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
-              4.9/5 Rating
-            </div>
-            <div className="stat">
-              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-                <path
-                  d="M4 13a8 8 0 0116 0v4a2 2 0 01-2 2h-1v-6h3M4 17v-4h3v6H6a2 2 0 01-2-2z"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Online Consultation
-            </div>
+            </a>
+
+            
           </div>
         </div>
 
@@ -578,6 +657,7 @@ export default function Hero() {
             style={{ opacity: loaded.hero ? 1 : 0 }}
             onLoad={() => setLoaded((s) => ({ ...s, hero: true }))}
           />
+
           {/* eslint-enable @next/next/no-img-element */}
         </div>
       </div>
