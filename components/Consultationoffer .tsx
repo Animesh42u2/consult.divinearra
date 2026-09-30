@@ -15,6 +15,11 @@ interface Bonus {
   image: string;
 }
 
+const ORIGINAL_PRICE = 2499;
+const OFFER_PRICE = 750;
+const DISCOUNT_PERCENT = Math.round(((ORIGINAL_PRICE - OFFER_PRICE) / ORIGINAL_PRICE) * 100); // 70
+const formatINR = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+
 const features: Feature[] = [
   { label: "Personalized Kundali Analysis" },
   { label: "1-on-1 Question-Based Guidance" },
@@ -101,7 +106,8 @@ export default function ConsultationOffer() {
               alt="Stack of books labeled Career, Finance, Health and Business beside an oil lamp and crystal ball"
               fill
               sizes="(max-width: 900px) 100vw, 55vw"
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "cover", objectPosition: "center top" }}
+              priority
             />
           </div>
 
@@ -128,8 +134,9 @@ export default function ConsultationOffer() {
             <h3>1-On-1 Personalized Consultation</h3>
 
             <div className="price-row">
-              <span className="price-old">₹2,499</span>
-              <span className="price-new">₹750</span>
+              <span className="price-old">{formatINR(ORIGINAL_PRICE)}</span>
+              <span className="price-new">{formatINR(OFFER_PRICE)}</span>
+              <span className="discount-badge">{DISCOUNT_PERCENT}% OFF</span>
             </div>
 
             <div className="meta-row">
@@ -143,19 +150,18 @@ export default function ConsultationOffer() {
                 <span>Free Personalized Kundali Report</span>
               </div>
             </div>
+
             <Link href="/checkout" className="cta-btn">
-            <button className="cta-btn">
               Book My Consultation
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <path
                   d="M5 12h14M13 6l6 6-6 6"
-                  stroke="var(--deep-brown)"
+                  stroke="var(--cream)"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
-            </button>
             </Link>
 
             <div className="trust-row">
@@ -192,8 +198,10 @@ export default function ConsultationOffer() {
 
       <style jsx>{`
         .offer {
+          --overlap: clamp(24px, 4vw, 48px);
           background: var(--cream);
           padding: clamp(28px, 5vw, 56px) clamp(16px, 5vw, 6vw) clamp(40px, 6vw, 72px);
+          overflow-x: hidden;
         }
         .offer-inner {
           max-width: 1200px;
@@ -203,21 +211,23 @@ export default function ConsultationOffer() {
         /* ---- Top row ---- */
         .offer-top {
           display: grid;
-          grid-template-columns: 1.15fr 1fr;
+          grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
           align-items: stretch;
           border-radius: 18px;
           overflow: hidden;
         }
         .offer-image {
           position: relative;
-          min-height: 260px;
+          min-height: calc(clamp(320px, 38vw, 460px) + var(--overlap));
         }
         .offer-checklist {
           background: var(--soft-cream-gold);
-          padding: clamp(24px, 3vw, 40px) clamp(24px, 3.5vw, 44px);
+          padding: clamp(24px, 3vw, 40px) clamp(20px, 3.5vw, 44px);
+          padding-bottom: calc(clamp(24px, 3vw, 40px) + var(--overlap));
           display: flex;
           flex-direction: column;
           justify-content: center;
+          min-width: 0;
         }
         .eyebrow {
           color: var(--royal-red);
@@ -261,15 +271,16 @@ export default function ConsultationOffer() {
           justify-content: center;
         }
 
-        /* ---- Bottom row ---- */
+        /* ---- Bottom row (no overlap, so the image and checklist are never covered) ---- */
         .offer-bottom {
           display: grid;
-          grid-template-columns: 1.2fr 1fr;
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
           gap: 24px;
-          margin-top: -32px;
+          margin-top: calc(var(--overlap) * -1);
           padding: 0 clamp(8px, 2vw, 24px);
           position: relative;
           z-index: 1;
+          align-items: stretch;
         }
 
         .pricing-card,
@@ -277,7 +288,8 @@ export default function ConsultationOffer() {
           background: var(--cream);
           border-radius: 16px;
           box-shadow: 0 18px 40px rgba(43, 22, 15, 0.14);
-          padding: clamp(24px, 3vw, 32px);
+          padding: clamp(20px, 3vw, 32px);
+          min-width: 0;
         }
 
         .special-badge {
@@ -302,8 +314,9 @@ export default function ConsultationOffer() {
         }
         .price-row {
           display: flex;
-          align-items: baseline;
-          gap: 12px;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px 12px;
           margin-bottom: 20px;
         }
         .price-old {
@@ -326,6 +339,20 @@ export default function ConsultationOffer() {
           color: var(--royal-red);
           font-size: clamp(30px, 4vw, 40px);
           font-weight: 800;
+          line-height: 1;
+        }
+        .discount-badge {
+          display: inline-flex;
+          align-items: center;
+          background: var(--gold);
+          color: var(--deep-brown);
+          font-size: clamp(12px, 1.4vw, 13.5px);
+          font-weight: 800;
+          letter-spacing: 0.03em;
+          padding: 6px 12px;
+          border-radius: 999px;
+          box-shadow: 0 4px 10px rgba(43, 22, 15, 0.15);
+          white-space: nowrap;
         }
 
         .meta-row {
@@ -349,7 +376,8 @@ export default function ConsultationOffer() {
           background: rgba(43, 22, 15, 0.2);
         }
 
-        .cta-btn {
+        /* Link renders its own <a>, so the class must be global (scoped under .offer) */
+        .offer :global(.cta-btn) {
           display: inline-flex;
           width: 100%;
           align-items: center;
@@ -357,6 +385,7 @@ export default function ConsultationOffer() {
           gap: 10px;
           background: var(--royal-red);
           color: var(--cream);
+          text-decoration: none;
           border: none;
           border-radius: 10px;
           padding: clamp(13px, 2.6vw, 16px) 20px;
@@ -366,12 +395,13 @@ export default function ConsultationOffer() {
           box-shadow: 0 12px 24px rgba(139, 0, 0, 0.25);
           transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .cta-btn svg path {
-          stroke: var(--cream);
-        }
-        .cta-btn:hover {
+        .offer :global(.cta-btn:hover) {
           transform: translateY(-2px);
           box-shadow: 0 16px 30px rgba(139, 0, 0, 0.32);
+        }
+        .offer :global(.cta-btn:focus-visible) {
+          outline: 3px solid var(--gold);
+          outline-offset: 2px;
         }
 
         .trust-row {
@@ -425,6 +455,7 @@ export default function ConsultationOffer() {
           display: flex;
           flex-direction: column;
           gap: 2px;
+          min-width: 0;
         }
         .bonus-text strong {
           color: var(--deep-brown);
@@ -439,16 +470,42 @@ export default function ConsultationOffer() {
         }
 
         /* ---- Responsive ---- */
+        @media (max-width: 1024px) {
+          .offer-top {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          }
+          .offer-bottom {
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            gap: 18px;
+          }
+        }
+
         @media (max-width: 900px) {
           .offer-top {
             grid-template-columns: 1fr;
           }
           .offer-image {
-            min-height: 220px;
+            min-height: 0;
+            aspect-ratio: 16 / 10;
           }
           .offer-bottom {
             grid-template-columns: 1fr;
-            margin-top: 0;
+            gap: 18px;
+          }
+          .pricing-card h3 {
+            max-width: none;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .offer-image {
+            aspect-ratio: 4 / 3;
+          }
+          .offer-top {
+            border-radius: 14px;
+          }
+          .offer-checklist ul {
+            gap: 12px;
           }
         }
 
@@ -464,6 +521,10 @@ export default function ConsultationOffer() {
           .trust-row {
             flex-direction: column;
             gap: 8px;
+          }
+          .bonus-thumb {
+            width: 50px;
+            height: 50px;
           }
         }
       `}</style>
