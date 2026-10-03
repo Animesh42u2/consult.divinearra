@@ -44,7 +44,7 @@ export default function AboutAstrologer() {
             ))}
           </ul>
 
-          <button className="know-more">
+          <a href="https://www.divinearra.com/about" className="know-more">
             Know More About Me
             <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
               <path
@@ -55,7 +55,7 @@ export default function AboutAstrologer() {
                 strokeLinejoin="round"
               />
             </svg>
-          </button>
+          </a>
         </div>
 
         <div className="quote-card">
@@ -166,6 +166,7 @@ export default function AboutAstrologer() {
           background: var(--gold);
           color: var(--deep-brown);
           border: none;
+          text-decoration: none;
           border-radius: 999px;
           padding: clamp(11px, 2.4vw, 14px) clamp(20px, 4vw, 26px);
           font-size: clamp(13px, 1.6vw, 14.5px);

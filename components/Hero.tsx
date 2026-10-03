@@ -233,7 +233,7 @@ export default function Hero() {
           font-family: var(--font-playfair), serif;
           font-weight: 800;
           color: var(--cream);
-          font-size: clamp(30px, 5vw, 60px);
+          font-size: clamp(26px, 3.6vw, 46px);
           line-height: 1.15;
           margin: 0 0 6px;
           text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
@@ -512,7 +512,7 @@ export default function Hero() {
         /* Very small phones */
         @media (max-width: 380px) {
           .headline {
-            font-size: clamp(26px, 8vw, 34px);
+            font-size: clamp(22px, 6.5vw, 30px);
           }
           .subtext {
             font-size: 14px;
@@ -598,9 +598,9 @@ export default function Hero() {
           </div>
 
           <h1 className="headline">
-            Your Life Questions Deserve a
-            <span className="accent">Personalized Answer.</span>
-          </h1>
+  Your Birth Chart Holds the Clues
+  <span className="accent">Decode Your Cosmic Blueprint, Discover Clarity &amp; Find Your Cosmic Path</span>
+</h1>
 
           <p className="subtext">
             A private 1-on-1 consultation based on your Kundali, your
@@ -618,7 +618,7 @@ export default function Hero() {
 
           <div className="cta-row">
             <a href="#consultation" className="cta" onClick={scrollToConsultation}>
-              Book My Consultation
+              Book Your Consultation
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <path
                   d="M5 12h14M13 6l6 6-6 6"

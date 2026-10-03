@@ -100,16 +100,24 @@ export default function ConsultationOffer() {
       <div className="offer-inner">
         {/* Top row: hero image + checklist */}
         <div className="offer-top">
-          <div className="offer-image">
-            <Image
-              src="/consultation-books-stack.webp"
-              alt="Stack of books labeled Career, Finance, Health and Business beside an oil lamp and crystal ball"
-              fill
-              sizes="(max-width: 900px) 100vw, 55vw"
-              style={{ objectFit: "cover", objectPosition: "center top" }}
-              priority
-            />
-          </div>
+          <div className="offer-image" style={{ position: "relative", overflow: "hidden" }}>
+  <Image
+    src="/consultation-books-stack.webp"
+    alt="Stack of books labeled Career, Finance, Health and Business beside an oil lamp and crystal ball"
+    width={1200}
+    height={900}
+    sizes="(max-width: 900px) 100vw, 55vw"
+    priority
+    style={{
+      position: "absolute",
+      inset: 0,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      objectPosition: "center top",
+    }}
+  />
+</div>
 
           <div className="offer-checklist">
             <span className="eyebrow">Your Consultation Includes</span>
@@ -152,7 +160,7 @@ export default function ConsultationOffer() {
             </div>
 
             <Link href="/checkout" className="cta-btn">
-              Book My Consultation
+              Book Your Consultation
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <path
                   d="M5 12h14M13 6l6 6-6 6"
@@ -183,8 +191,15 @@ export default function ConsultationOffer() {
               {bonuses.map((b) => (
                 <li key={b.title}>
                   <span className="bonus-thumb">
-                    <Image src={b.image} alt={b.title} fill sizes="60px" style={{ objectFit: "cover" }} />
-                  </span>
+  <Image
+    src={b.image}
+    alt={b.title}
+    width={56}
+    height={56}
+    sizes="56px"
+    style={{ objectFit: "cover", borderRadius: 10 }}
+  />
+</span>
                   <span className="bonus-text">
                     <strong>{b.title}</strong>
                     <span>{b.description}</span>

@@ -497,8 +497,8 @@ export default function CheckoutPage() {
 
               <p className="ck-terms">
                 By proceeding, you agree to our{' '}
-                <Link href="/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</Link>{' '}and{' '}
-                <Link href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link>.
+                <Link href="https://www.divinearra.com/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</Link>{' '}and{' '}
+                <Link href="https://www.divinearra.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link>.
               </p>
 
               <button className="ck-btn" onClick={handlePayment} disabled={paying}>
