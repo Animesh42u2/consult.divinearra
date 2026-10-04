@@ -234,7 +234,7 @@ export default function FeelingUncertain() {
         h2 {
           font-family: var(--font-playfair), serif;
           font-weight: 800;
-          color: var(--deep-brown, #2b160f);
+          color: var(--royal-red);
           font-size: clamp(22px, 3.6vw, 40px);
           line-height: 1.15;
           text-align: center;

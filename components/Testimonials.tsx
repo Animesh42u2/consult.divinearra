@@ -62,6 +62,7 @@ export default function Testimonials() {
           style={{
             textAlign: "center",
             fontSize: "clamp(24px, 4.5vw, 40px)",
+            fontFamily: "var(--font-playfair), serif",
             color: "var(--deep-brown)",
             marginBottom: "clamp(24px, 5vw, 44px)",
             fontWeight: 700,
@@ -105,6 +106,7 @@ export default function Testimonials() {
                       style={{
                         fontWeight: 600,
                         fontSize: "clamp(14px, 1.6vw, 15px)",
+                        fontFamily: "var(--font-playfair), serif",
                         color: "var(--deep-brown)",
                         margin: 0,
                         overflowWrap: "break-word",

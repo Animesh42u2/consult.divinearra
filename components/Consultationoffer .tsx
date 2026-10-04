@@ -34,11 +34,6 @@ const bonuses: Bonus[] = [
     image: "/bonus-kundali-report.webp",
   },
   {
-    title: "Varshphal Report 2026",
-    description: "Your personalized yearly forecast.",
-    image: "/bonus-varshphal-2026.webp",
-  },
-  {
     title: "Personalized Remedy Guidance",
     description: "Simple and effective remedies where relevant.",
     image: "/bonus-remedy-guidance.webp",
@@ -435,7 +430,11 @@ export default function ConsultationOffer() {
           font-weight: 600;
         }
 
-        .bonuses-title {
+        .bonuses-card {
+     align-self: start;
+   }
+
+   .bonuses-title {
           display: block;
           color: var(--royal-red);
           font-size: 12px;

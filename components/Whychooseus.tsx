@@ -86,6 +86,10 @@ export default function WhyChooseUs() {
 
   return (
     <section ref={ref} className={`why ${inView ? "is-in" : ""}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/design.png" alt="" aria-hidden="true" className="deco deco--tr" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/design.png" alt="" aria-hidden="true" className="deco deco--bl" />
       <div className="why-inner">
         <div className="why-copy">
           <h2 className="reveal" style={{ "--i": 0 } as CSSProperties}>
@@ -146,13 +150,42 @@ export default function WhyChooseUs() {
 
       <style jsx>{`
         .why {
+          position: relative;
           background: var(--cream);
           border-top: none;
           border-bottom: none;
           padding: clamp(40px, 6vw, 72px) clamp(20px, 6vw, 6vw);
           overflow-x: hidden;
         }
+        .deco {
+          position: absolute;
+          pointer-events: none;
+          z-index: 0;
+          max-width: none;
+          width: clamp(130px, 17vw, 260px);
+          opacity: 0.7;
+          filter: brightness(0) saturate(100%) invert(62%) sepia(75%)
+            saturate(620%) hue-rotate(1deg) brightness(103%);
+        }
+        .deco--tr {
+          top: 0;
+          right: 0;
+          transform: translateX(34%);
+        }
+        .deco--bl {
+          bottom: 0;
+          left: 0;
+          transform: translateX(-34%) scaleX(-1);
+        }
+        @media (max-width: 640px) {
+          .deco {
+            width: 110px;
+            opacity: 0.5;
+          }
+        }
         .why-inner {
+          position: relative;
+          z-index: 1;
           max-width: 1240px;
           margin: 0 auto;
           display: flex;
@@ -308,7 +341,35 @@ export default function WhyChooseUs() {
 
         /* ---------- Responsive ---------- */
         @media (max-width: 1024px) {
-          .why-inner {
+          .deco {
+          position: absolute;
+          pointer-events: none;
+          z-index: 0;
+          max-width: none;
+          width: clamp(130px, 17vw, 260px);
+          opacity: 0.7;
+          filter: brightness(0) saturate(100%) invert(62%) sepia(75%)
+            saturate(620%) hue-rotate(1deg) brightness(103%);
+        }
+        .deco--tr {
+          top: 0;
+          right: 0;
+          transform: translateX(34%);
+        }
+        .deco--bl {
+          bottom: 0;
+          left: 0;
+          transform: translateX(-34%) scaleX(-1);
+        }
+        @media (max-width: 640px) {
+          .deco {
+            width: 110px;
+            opacity: 0.5;
+          }
+        }
+        .why-inner {
+          position: relative;
+          z-index: 1;
             grid-template-columns: 1fr;
           }
           .desc {

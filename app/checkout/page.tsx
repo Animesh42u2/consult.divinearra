@@ -22,7 +22,6 @@ const CONSULTATION = {
   ],
   bonuses: [
     { title: 'Personalized Kundali Report', desc: 'A detailed report based on your birth chart.', price: '₹799', img: '/bonus-kundali-report.webp' },
-    { title: 'Varshphal Report 2026', desc: 'Your personalized yearly forecast.', price: '₹599', img: '/bonus-varshphal-2026.webp' },
     { title: 'Personalized Remedy Guidance', desc: 'Simple and effective remedies where relevant.', price: '₹399', img: '/bonus-remedy-guidance.webp' },
   ],
 }

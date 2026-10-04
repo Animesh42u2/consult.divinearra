@@ -63,7 +63,8 @@ export default function FAQ() {
             color: "var(--royal-red)",
             fontWeight: 700,
             letterSpacing: "0.05em",
-            fontSize: "clamp(18px, 3vw, 22px)",
+            fontSize: "clamp(22px, 4vw, 32px)",
+            fontFamily: "var(--font-playfair), serif",
             marginBottom: "clamp(22px, 3.5vw, 32px)",
           }}
         >
@@ -103,6 +104,7 @@ export default function FAQ() {
                     textAlign: "left",
                     fontWeight: 600,
                     fontSize: "clamp(15.5px, 2.2vw, 17.5px)",
+                    fontFamily: "var(--font-playfair), serif",
                     color: "var(--deep-brown)",
                     cursor: "pointer",
                   }}
