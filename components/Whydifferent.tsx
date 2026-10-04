@@ -70,6 +70,10 @@ const features: FeatureItem[] = [
 export default function WhyDifferent() {
   return (
     <section className="why-different">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/design.png" alt="" aria-hidden="true" className="deco deco--tr" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/design.png" alt="" aria-hidden="true" className="deco deco--bl" />
       <div className="wd-inner">
         <p className="eyebrow">What Makes It Different ?</p>
         <h2>A Truly Personalized Experience</h2>
@@ -91,10 +95,40 @@ export default function WhyDifferent() {
 
       <style jsx>{`
         .why-different {
+          position: relative;
+          overflow: hidden;
           background: var(--cream);
           padding: 64px 6vw;
         }
+        .deco {
+          position: absolute;
+          pointer-events: none;
+          z-index: 0;
+          max-width: none;
+          width: clamp(110px, 14vw, 210px);
+          opacity: 0.7;
+          filter: brightness(0) saturate(100%) invert(62%) sepia(75%)
+            saturate(620%) hue-rotate(1deg) brightness(103%);
+        }
+           .deco--tr {
+             top: 0;
+             left: 0;
+             transform: translateX(-34%) scaleX(-1);
+           }
+           .deco--bl {
+             bottom: 0;
+             right: 0;
+             transform: translateX(34%);
+           }
+        @media (max-width: 640px) {
+          .deco {
+            width: 90px;
+            opacity: 0.5;
+          }
+        }
         .wd-inner {
+          position: relative;
+          z-index: 1;
           max-width: 1160px;
           margin: 0 auto;
         }

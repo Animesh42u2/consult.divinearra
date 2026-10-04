@@ -96,6 +96,10 @@ export default function HowItWorks() {
 
   return (
     <section className="how-it-works">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/design.png" alt="" aria-hidden="true" className="deco deco--tr" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/design.png" alt="" aria-hidden="true" className="deco deco--bl" />
       <div className={`hiw-inner${isVisible ? " is-visible" : ""}`} ref={innerRef}>
         <p className="eyebrow">How It Works</p>
         <h2>Get Clarity in 3 Simple Steps</h2>
@@ -169,11 +173,40 @@ export default function HowItWorks() {
 
       <style jsx>{`
         .how-it-works {
+          position: relative;
           background: var(--cream);
           padding: clamp(40px, 7vw, 56px) clamp(16px, 6vw, 6vw) clamp(48px, 8vw, 80px);
           overflow-x: hidden;
         }
+        .deco {
+          position: absolute;
+          pointer-events: none;
+          z-index: 0;
+          max-width: none;
+          width: clamp(110px, 14vw, 210px);
+          opacity: 0.7;
+          filter: brightness(0) saturate(100%) invert(62%) sepia(75%)
+            saturate(620%) hue-rotate(1deg) brightness(103%);
+        }
+        .deco--tr {
+          top: 0;
+          left: 0;
+          transform: translateX(-34%) scaleX(-1);
+        }
+        .deco--bl {
+          bottom: 0;
+          right: 0;
+          transform: translateX(34%);
+        }
+        @media (max-width: 640px) {
+          .deco {
+            width: 90px;
+            opacity: 0.5;
+          }
+        }
         .hiw-inner {
+          position: relative;
+          z-index: 1;
           max-width: 1100px;
           margin: 0 auto;
         }
