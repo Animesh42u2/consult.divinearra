@@ -23,7 +23,7 @@ export default function AboutAstrologer() {
           <p className="role">Founder &amp; Astrologer</p>
           <p className="desc">
             With years of experience in Vedic Astrology,{" "}
-            <strong>Astro Aaditya Narayan Ji & his Team</strong> help you uncover the
+            <strong>Astro Aaditya Narayan Ji & his team</strong> help you uncover the
             right path and make confident decisions in life.
           </p>
 

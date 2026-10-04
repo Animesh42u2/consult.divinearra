@@ -89,7 +89,7 @@ export default function WhyChooseUs() {
       <div className="why-inner">
         <div className="why-copy">
           <h2 className="reveal" style={{ "--i": 0 } as CSSProperties}>
-            Why Choose Divine Arra?
+            Why Choose Divine Arra ?
           </h2>
           <p className="tagline reveal" style={{ "--i": 1 } as CSSProperties}>
             Traditional Wisdom. Personalized Interpretation.

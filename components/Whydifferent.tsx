@@ -71,7 +71,7 @@ export default function WhyDifferent() {
   return (
     <section className="why-different">
       <div className="wd-inner">
-        <p className="eyebrow">What Makes It Different?</p>
+        <p className="eyebrow">What Makes It Different ?</p>
         <h2>A Truly Personalized Experience</h2>
 
         <div className="feature-grid">

@@ -11,32 +11,32 @@ type FaqEntry = {
 
 const faqs: FaqEntry[] = [
   {
-    question: "Is this a personalized consultation?",
+    question: "Is this a personalized consultation ?",
     answer:
       "Yes. Every session is based on your own birth details and the questions you bring, not a pre-written script.",
   },
   {
-    question: "What information do I need to provide?",
+    question: "What information do I need to provide ?",
     answer:
       "Just your date, time and place of birth, plus anything specific you'd like to focus on during the session.",
   },
   {
-    question: "What topics can I ask about?",
+    question: "What topics can I ask about ?",
     answer:
       "Career, relationships, health, finances, or any life decision you're weighing — the conversation follows what matters to you.",
   },
   {
-    question: "Will I get guaranteed predictions?",
+    question: "Will I get guaranteed predictions ?",
     answer:
       "No. You'll get honest guidance and perspective to help you decide for yourself, not fixed guarantees about the future.",
   },
   {
-    question: "How long does a session last?",
+    question: "How long does a session last ?",
     answer:
       "Most consultations run 30 to 45 minutes, enough time to go through your chart and cover your questions without feeling rushed.",
   },
   {
-    question: "Can I book a follow-up session?",
+    question: "Can I book a follow-up session ?",
     answer:
       "Yes. Many clients return for follow-ups as circumstances change or new questions come up — just book another slot whenever you're ready.",
   },

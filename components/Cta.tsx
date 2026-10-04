@@ -65,7 +65,7 @@ export default function CTA() {
 
       <div className="cta-inner">
         <span className="eyebrow">Your Chart. Your Questions. Your Clarity.</span>
-        <h2>Ready to Take the Next Step?</h2>
+        <h2>Ready to Take the Next Step ?</h2>
         <p>
           Book your 1-on-1 personalized consultation and gain a clearer
           astrological perspective on the areas that matter to you.

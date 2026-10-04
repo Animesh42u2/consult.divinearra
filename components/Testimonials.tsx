@@ -52,7 +52,7 @@ export default function Testimonials() {
             color: "var(--royal-red)",
             fontWeight: 700,
             letterSpacing: "0.08em",
-            fontSize: "clamp(12px, 1.4vw, 13px)",
+            fontSize: "clamp(14px, 1.6vw, 16px)",
             marginBottom: 8,
           }}
         >
@@ -68,7 +68,7 @@ export default function Testimonials() {
             padding: "0 8px",
           }}
         >
-          What People Say
+          What People Say ?
         </h2>
 
         <div className="marquee">

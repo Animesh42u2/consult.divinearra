@@ -115,7 +115,7 @@ export default function WhatCanWeDiscuss() {
     <section ref={ref} className={`discuss ${inView ? "is-in" : ""}`}>
       <div className="discuss-inner">
         <h2 className="reveal" style={{ "--i": 0 } as CSSProperties}>
-          What Can We Discuss?
+          What Can We Discuss ?
         </h2>
         <p className="sub reveal" style={{ "--i": 1 } as CSSProperties}>
           Choose the areas that matter most to you.
@@ -172,6 +172,7 @@ export default function WhatCanWeDiscuss() {
         .discuss-inner {
           position: relative;
           max-width: 1200px;
+          text-align: center;
           margin: 0 auto;
         }
 

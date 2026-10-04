@@ -11,7 +11,7 @@ interface Question {
 
 const leftQuestions: Question[] = [
   {
-    text: "Which career direction is right for me?",
+    text: "Which career direction is right for me ?",
     icon: (
       <>
         <rect x="3" y="7" width="18" height="13" rx="2" />
@@ -20,7 +20,7 @@ const leftQuestions: Question[] = [
     ),
   },
   {
-    text: "When will I get married?",
+    text: "When will I get married ?",
     icon: (
       <>
         <circle cx="9" cy="14" r="4.5" />
@@ -30,7 +30,7 @@ const leftQuestions: Question[] = [
     ),
   },
   {
-    text: "Will my finances improve?",
+    text: "Will my finances improve ?",
     icon: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -39,7 +39,7 @@ const leftQuestions: Question[] = [
     ),
   },
   {
-    text: "What does my current dasha indicate?",
+    text: "What does my current dasha indicate ?",
     icon: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -51,7 +51,7 @@ const leftQuestions: Question[] = [
 
 const rightQuestions: Question[] = [
   {
-    text: "Is this the right time for a big decision?",
+    text: "Is this the right time for a big decision ?",
     icon: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -60,17 +60,17 @@ const rightQuestions: Question[] = [
     ),
   },
   {
-    text: "Why do I face repeated delays?",
+    text: "Why do I face repeated delays ?",
     icon: <path d="M7 3h10M7 21h10M8 3v3.500L12 12l-4 5.500V21M16 3v3.500L12 12l4 5.500V21" />,
   },
   {
-    text: "What does my chart say about love and relationships?",
+    text: "What does my chart say about love and relationships ?",
     icon: (
       <path d="M12 20.500s-8-4.700-8-10.300A4.500 4.500 0 0112 7.500a4.500 4.500 0 018 2.700c0 5.600-8 10.300-8 10.300z" />
     ),
   },
   {
-    text: "How can I overcome challenges and obstacles?",
+    text: "How can I overcome challenges and obstacles ?",
     icon: (
       <>
         <path d="M3 20l6-10 4 6 2-3 6 7z" />
@@ -111,7 +111,7 @@ export default function FeelingUncertain() {
     <section ref={ref} className={`feeling-uncertain ${inView ? "is-in" : ""}`}>
       <div className="fu-inner">
         <h2 className="reveal" style={{ "--i": 0 } as CSSProperties}>
-          Feeling Uncertain About What Comes Next?
+          Feeling Uncertain About What Comes Next ?
         </h2>
         <p className="sub reveal" style={{ "--i": 1 } as CSSProperties}>
           You&apos;re not alone. Many people have the same questions...

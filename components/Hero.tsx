@@ -370,9 +370,12 @@ export default function Hero() {
           filter: drop-shadow(0 0 30px rgba(244, 197, 66, 0.25));
           object-fit: contain;
           transition: opacity 0.6s ease;
+          transform: scale(1.4);
+          transform-origin: center;
         }
         .hero-portrait.is-loaded {
           opacity: 1;
+          transform: scale(1);
         }
 
         .stat-cards {
@@ -651,7 +654,7 @@ export default function Hero() {
           <div className="glow" />
           <img
             ref={heroRef}
-            src="/hero.png"
+            src="/saint.png"
             alt="Astrologer"
             className="hero-portrait"
             style={{ opacity: loaded.hero ? 1 : 0 }}

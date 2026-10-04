@@ -30,8 +30,6 @@ const CONSULTATION = {
 const ADDON = {
   badge: 'Highly Recommended',
   title: 'Couple Consultation',
-  desc: 'Speak directly with our expert astrologer about your compatibility and what it means.',
-  duration: '30 mins session',
   price: '₹499',
 }
 
@@ -505,7 +503,6 @@ export default function CheckoutPage() {
           {/* ── LEFT: form ── */}
           <section className="ck-card">
             <div className="ck-sec">
-              <span className="ck-num">1</span>
               <div>
                 <h2>Your Consultation Details</h2>
                 <p>Please fill in the details below so we can prepare for your personalized consultation.</p>
@@ -659,14 +656,14 @@ export default function CheckoutPage() {
               <div className={`ck-addon${addOn ? ' on' : ''}`}>
                 <span className="ck-addon-badge">{ADDON.badge}</span>
                 <h3>{ADDON.title}</h3>
-                <p className="ck-addon-line">
-                  <Icon d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
-                  {ADDON.desc}
-                </p>
-                <p className="ck-addon-line">
-                  <Icon d={ICONS.clock} />
-                  {ADDON.duration}
-                </p>
+ <p className="ck-addon-line">
+  <Icon d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
+  <span>Know your compatibility and get clear guidance for your relationship.</span>
+</p>
+<p className="ck-addon-line">
+  <Icon d={ICONS.chat} />
+  <span>Get your questions answered live by our expert astrologer during the session.</span>
+</p>
                 <div className="ck-addon-foot">
                   <b>{ADDON.price}</b>
                   <button
@@ -726,7 +723,7 @@ export default function CheckoutPage() {
                       <li key={t}><span className="ck-tick">✓</span>{t}</li>
                     ))}
                     {addOn && (
-                      <li><span className="ck-tick">✓</span>{ADDON.title} ({ADDON.duration})</li>
+                      <li><span className="ck-tick">✓</span>{ADDON.title}</li>
                     )}
                   </ul>
                 </div>
@@ -773,7 +770,7 @@ export default function CheckoutPage() {
               <><span className="ck-spin" /> Processing Payment…</>
             ) : (
               <>
-                Pay now · {totalLabel}
+                Pay Now · {totalLabel}
                 <svg viewBox="0 0 24 24" fill="none" width="20" height="20" aria-hidden="true">
                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
