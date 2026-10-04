@@ -474,6 +474,9 @@ export default function Hero() {
           .cta-row {
             justify-content: center;
           }
+          .hero {
+            padding-bottom: 80px;
+          }
           .wheel-wrap {
             order: -1;
             max-width: 420px;
@@ -487,13 +490,25 @@ export default function Hero() {
         @media (max-width: 520px) {
           .lotus--tr {
             width: clamp(90px, 24vw, 160px);
+            top: -8px;
+            right: -10px;
           }
           .lotus--bl,
           .lotus--br {
             width: clamp(110px, 26vw, 190px);
+            bottom: -6px;
+          }
+          .lotus--bl {
+            left: -10px;
+          }
+          .lotus--br {
+            right: -10px;
           }
           .cta-row {
             justify-content: center;
+          }
+          .hero {
+            padding-bottom: 80px;
           }
           .cta {
             width: 100%;
