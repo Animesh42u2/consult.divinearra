@@ -22,8 +22,9 @@ export default function AboutAstrologer() {
           <h2>Get Guidance from a Trusted Astrologer</h2>
           <p className="role">Founder &amp; Astrologer</p>
           <p className="desc">
-            With years of experience in Vedic Astrology, we help you uncover
-            the right path and make confident decisions in life.
+            With years of experience in Vedic Astrology,{" "}
+            <strong>Astro Aaditya Narayan Ji & his Team</strong> help you uncover the
+            right path and make confident decisions in life.
           </p>
 
           <ul className="checklist">
@@ -45,7 +46,7 @@ export default function AboutAstrologer() {
           </ul>
 
           <a href="https://www.divinearra.com/about" className="know-more">
-            Know More About Me
+            Know More About Us
             <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
               <path
                 d="M5 12h14M13 6l6 6-6 6"
@@ -137,6 +138,10 @@ export default function AboutAstrologer() {
           line-height: 1.7;
           margin-bottom: 20px;
           max-width: 440px;
+        }
+        .desc strong {
+          color: var(--gold);
+          font-weight: 700;
         }
         .checklist {
           list-style: none;

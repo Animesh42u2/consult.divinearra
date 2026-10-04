@@ -100,20 +100,6 @@ export default function WhyChooseUs() {
             consultation is based on your unique birth chart, not a
             one-size-fits-all reading.
           </p>
-          <div className="reveal" style={{ "--i": 3 } as CSSProperties}>
-            <Link href="https://www.divinearra.com/" className="why-btn">
-              Learn More About Us
-              <svg viewBox="0 0 24 24" fill="none" width="16" height="16" aria-hidden="true">
-                <path
-                  d="M5 12h14M13 6l6 6-6 6"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-          </div>
         </div>
 
         <ul className="pillars">
@@ -141,6 +127,21 @@ export default function WhyChooseUs() {
             </li>
           ))}
         </ul>
+
+        <div className="reveal" style={{ "--i": 7 } as CSSProperties}>
+          <Link href="https://www.divinearra.com/" className="why-btn">
+            Learn More About Us
+            <svg viewBox="0 0 24 24" fill="none" width="16" height="16" aria-hidden="true">
+              <path
+                d="M5 12h14M13 6l6 6-6 6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+        </div>
       </div>
 
       <style jsx>{`
@@ -154,10 +155,10 @@ export default function WhyChooseUs() {
         .why-inner {
           max-width: 1240px;
           margin: 0 auto;
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr);
+          display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: clamp(24px, 4vw, 48px);
+          gap: clamp(28px, 4vw, 48px);
         }
 
         /* ---------- Reveal ---------- */
@@ -178,11 +179,13 @@ export default function WhyChooseUs() {
         /* ---------- Copy ---------- */
         .why-copy {
           min-width: 0;
+          width: 100%;
+          text-align: center;
         }
         h2 {
           font-family: var(--font-playfair), serif;
           font-weight: 800;
-          color: var(--deep-brown);
+          color: var(--royal-red);
           font-size: clamp(24px, 3.2vw, 34px);
           line-height: 1.2;
           margin: 0 0 10px;
@@ -197,8 +200,9 @@ export default function WhyChooseUs() {
           color: var(--deep-brown);
           font-size: clamp(13px, 1.3vw, 14.5px);
           line-height: 1.7;
-          margin: 0 0 22px;
-          max-width: 44ch;
+          margin: 0 auto;
+          max-width: 100ch;
+          text-wrap: balance;
         }
         .is-in .desc {
           opacity: 0.78;
@@ -246,7 +250,9 @@ export default function WhyChooseUs() {
           padding: 0;
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
-          align-items: start;
+          align-items: stretch;
+          width: 100%;
+          max-width: 1000px;
         }
         .pillar {
           display: flex;

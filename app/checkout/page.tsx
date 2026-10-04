@@ -27,18 +27,39 @@ const CONSULTATION = {
   ],
 }
 
+const ADDON = {
+  badge: 'Highly Recommended',
+  title: 'Couple Consultation',
+  desc: 'Speak directly with our expert astrologer about your compatibility and what it means.',
+  duration: '30 mins session',
+  price: '₹499',
+}
+
 // Cashfree's order_amount is in rupees (not paise).
 const toRupees = (p: string) => parseFloat(p.replace(/[^\d.]/g, ''))
 
 type FormState = {
   name: string; email: string; countryCode: string; whatsapp: string
   dob: string; time: string; place: string; concern: string
+  consultDate: string; consultTime: string
+  partnerPlace: string; partnerDob: string; partnerTime: string
 }
 const EMPTY: FormState = {
   name: '', email: '', countryCode: '+91', whatsapp: '',
   dob: '', time: '', place: '', concern: '',
+  consultDate: '', consultTime: '',
+  partnerPlace: '', partnerDob: '', partnerTime: '',
 }
 const MAX_CONCERN = 500
+
+const SLOTS = [
+  '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM',
+  '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM',
+]
+const todayISO = () => {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
 const Icon = ({ d }: { d: string }) => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8a1c1c" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -46,35 +67,67 @@ const Icon = ({ d }: { d: string }) => (
   </svg>
 )
 const Err = ({ message }: { message?: string }) => (message ? <p className="ck-err">{message}</p> : null)
-const UpiLogo = () => (
-  <svg width="46" height="20" viewBox="0 0 46 20" role="img" aria-label="UPI">
-    <text x="0" y="15" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="800" fontStyle="italic" fill="#3b3b3b">UPI</text>
-    <polygon points="33,3 37,3 42,10 38,10" fill="#f47920" />
-    <polygon points="38,10 42,10 37,17 33,17" fill="#097939" />
-  </svg>
-)
-const VisaLogo = () => (
-  <svg width="48" height="20" viewBox="0 0 48 20" role="img" aria-label="Visa">
-    <text x="1" y="16" fontFamily="Arial Black, Arial, sans-serif" fontSize="18" fontWeight="900" fontStyle="italic" letterSpacing="-0.5" fill="#1a1f71">VISA</text>
-  </svg>
-)
-const MastercardLogo = () => (
-  <svg width="40" height="26" viewBox="0 0 40 26" role="img" aria-label="Mastercard">
-    <defs><clipPath id="mc-red"><circle cx="15" cy="13" r="10" /></clipPath></defs>
-    <circle cx="15" cy="13" r="10" fill="#eb001b" />
-    <circle cx="25" cy="13" r="10" fill="#f79e1b" />
-    <circle cx="25" cy="13" r="10" fill="#ff5f00" clipPath="url(#mc-red)" />
-  </svg>
-)
-const RupayLogo = () => (
-  <svg width="56" height="20" viewBox="0 0 56 20" role="img" aria-label="RuPay">
-    <text x="0" y="15" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="800" fontStyle="italic">
-      <tspan fill="#1b4a9c">Ru</tspan><tspan fill="#f58220">Pay</tspan>
-    </text>
-    <polygon points="46,3 49,3 54,10 51,10" fill="#f58220" />
-    <polygon points="51,10 54,10 49,17 46,17" fill="#0a8a3c" />
-  </svg>
-)
+function BirthTime({
+  id, label, value, onChange, error,
+}: {
+  id: string; label: string; value: string; onChange: (v: string) => void; error?: string
+}) {
+  const unknown = value === 'Unknown'
+  const [hh, setHh] = useState('')
+  const [mm, setMm] = useState('')
+  const [ap, setAp] = useState<'AM' | 'PM'>('AM')
+
+  const push = (h: string, m: string, a: 'AM' | 'PM') => {
+    const hn = parseInt(h, 10)
+    const mn = parseInt(m, 10)
+    if (h && m && hn >= 1 && hn <= 12 && mn >= 0 && mn <= 59) {
+      onChange(`${String(hn).padStart(2, '0')}:${String(mn).padStart(2, '0')} ${a}`)
+    } else {
+      onChange('')
+    }
+  }
+
+  return (
+    <div className="ck-f">
+      <label className="ck-lab" htmlFor={id}>{label} <i>*</i></label>
+      <div className={`ck-time${unknown ? ' off' : ''}`}>
+        <input
+          id={id} inputMode="numeric" maxLength={2} placeholder="HH" disabled={unknown}
+          aria-label={`${label} hour`} value={hh}
+          onChange={(e) => { const v = e.target.value.replace(/\D/g, '').slice(0, 2); setHh(v); push(v, mm, ap) }}
+          onBlur={() => { if (hh.length === 1) { const p = '0' + hh; setHh(p); push(p, mm, ap) } }}
+        />
+        <span className="ck-time-sep">:</span>
+        <input
+          inputMode="numeric" maxLength={2} placeholder="MM" disabled={unknown}
+          aria-label={`${label} minutes`} value={mm}
+          onChange={(e) => { const v = e.target.value.replace(/\D/g, '').slice(0, 2); setMm(v); push(hh, v, ap) }}
+          onBlur={() => { if (mm.length === 1) { const p = '0' + mm; setMm(p); push(hh, p, ap) } }}
+        />
+        <div className="ck-ap" role="group" aria-label="AM or PM">
+          {(['AM', 'PM'] as const).map((p) => (
+            <button
+              key={p} type="button" className={ap === p ? 'on' : ''} disabled={unknown}
+              aria-pressed={ap === p}
+              onClick={() => { setAp(p); push(hh, mm, p) }}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+      </div>
+      <label className="ck-unk">
+        <input
+          type="checkbox" checked={unknown}
+          onChange={(e) => (e.target.checked ? onChange('Unknown') : push(hh, mm, ap))}
+        />
+        I don&apos;t know accurate time
+      </label>
+      <Err message={error} />
+    </div>
+  )
+}
+
 const ICONS = {
   user: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
   mail: 'M4 6h16v12H4zM4 7l8 6 8-6',
@@ -97,12 +150,23 @@ export default function CheckoutPage() {
   const [errorMsg, setErrorMsg] = useState('')
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [addOn, setAddOn] = useState(false)
+
+  const total = toRupees(CONSULTATION.discountedPrice) + (addOn ? toRupees(ADDON.price) : 0)
+  const totalLabel = `₹${total.toLocaleString('en-IN')}`
+  const productName = addOn ? `${CONSULTATION.title} + ${ADDON.title}` : CONSULTATION.title
+  const originalTotalLabel = `₹${(toRupees(CONSULTATION.originalPrice) + (addOn ? toRupees(ADDON.price) : 0)).toLocaleString('en-IN')}`
 
   const set = (k: keyof FormState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
       setForm((p) => ({ ...p, [k]: e.target.value }))
       if (errors[k]) setErrors((er) => ({ ...er, [k]: '' }))
     }
+
+  const setVal = (k: keyof FormState) => (v: string) => {
+    setForm((p) => ({ ...p, [k]: v }))
+    if (errors[k]) setErrors((er) => ({ ...er, [k]: '' }))
+  }
 
   function validate() {
     const e: Record<string, string> = {}
@@ -113,6 +177,14 @@ export default function CheckoutPage() {
     if (!form.time) e.time = 'Please enter your time of birth.'
     if (!form.place.trim()) e.place = 'Please enter your place of birth.'
     if (!form.concern.trim()) e.concern = 'Please tell us what you would like to discuss.'
+    if (!form.consultDate) e.consultDate = 'Please choose a consultation date.'
+    else if (form.consultDate < todayISO()) e.consultDate = 'Please choose today or a future date.'
+    if (!form.consultTime) e.consultTime = 'Please choose a consultation time.'
+    if (addOn) {
+      if (!form.partnerPlace.trim()) e.partnerPlace = "Please enter your partner's place of birth."
+      if (!form.partnerDob) e.partnerDob = "Please enter your partner's date of birth."
+      if (!form.partnerTime) e.partnerTime = "Please enter your partner's time of birth."
+    }
     return e
   }
 
@@ -135,23 +207,29 @@ export default function CheckoutPage() {
   // Log the full form to your own store keyed by orderId if you need it.
   async function handlePayment() {
     const v = validate()
-    if (Object.keys(v).length) { setErrors(v); return }
+    if (Object.keys(v).length) {
+      setErrors(v)
+      setTimeout(() => {
+        document.querySelector('.ck-err')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 50)
+      return
+    }
     setPaying(true)
     setErrorMsg('')
     const phone = `${form.countryCode}${form.whatsapp.replace(/\D/g, '')}`
 
     await openCashfreeCheckout({
-      amount: toRupees(CONSULTATION.discountedPrice),
+      amount: total,
       name: form.name,
       email: form.email,
       phone,
-      description: CONSULTATION.title,
-      note: `DOB:${form.dob} | Time:${form.time} | Place:${form.place} | Q:${form.concern}`.slice(0, 200),
+      description: productName,
+      note: `Consult:${form.consultDate} ${form.consultTime} | DOB:${form.dob} | Time:${form.time} | Place:${form.place}${addOn ? ` | Partner:${form.partnerDob} ${form.partnerTime} ${form.partnerPlace}` : ''} | Q:${form.concern}`.slice(0, 200),
 
       onSuccess(orderId) {
         setPaying(false)
         router.push(
-          `/payment-success?orderId=${encodeURIComponent(orderId)}&product=${encodeURIComponent(CONSULTATION.title)}&amount=${encodeURIComponent(CONSULTATION.discountedPrice)}&name=${encodeURIComponent(form.name)}&whatsapp=${encodeURIComponent(phone)}`
+          `/payment-success?orderId=${encodeURIComponent(orderId)}&product=${encodeURIComponent(productName)}&amount=${encodeURIComponent(totalLabel)}&name=${encodeURIComponent(form.name)}&whatsapp=${encodeURIComponent(phone)}`
         )
       },
       onFailure(message) {
@@ -173,7 +251,9 @@ export default function CheckoutPage() {
         .ck h1,.ck h2,.ck h3,.ck .serif { font-family:'Playfair Display', Georgia, serif; }
 
         /* Header */
-        .ck-head { position:relative; text-align:center; padding:28px 20px 26px; border-bottom:1px solid var(--line); overflow:hidden; }
+        .ck-head { position:relative; text-align:center; padding:28px 20px 26px; overflow:hidden; }
+        .ck-head::after { content:''; position:absolute; left:0; right:0; bottom:0; height:70px; z-index:1; pointer-events:none;
+          background:linear-gradient(to bottom, rgba(253,246,231,0) 0%, #fdf6e7 100%); }
         .ck-back { position:absolute; left:clamp(12px,4vw,44px); top:26px; z-index:3; display:inline-flex; align-items:center; gap:8px;
           background:#fffdf7; border:1px solid var(--line); border-radius:100px; padding:9px 18px; font-size:14px; font-weight:600; color:var(--ink); text-decoration:none; }
         .ck-deco { position:absolute; top:0; height:100%; width:min(44%,540px); object-fit:cover; pointer-events:none; mix-blend-mode:multiply; z-index:0; }
@@ -234,6 +314,25 @@ export default function CheckoutPage() {
         .ck-chips { margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; }
         .ck-chips span { display:flex; align-items:center; justify-content:center; height:38px; min-width:60px; padding:0 10px; border:1px solid #ead9b8; background:#fff; border-radius:8px; }
 
+        .ck-addon { position:relative; padding:28px 22px 20px; border:1.5px solid var(--gold); border-radius:16px; background:#fffbee; transition:border-color .15s, box-shadow .15s; }
+        .ck-addon.on { border-color:#c98a1c; box-shadow:0 0 0 3px rgba(233,178,60,.25); }
+        .ck-addon-badge { position:absolute; top:-1px; left:-1px; background:#16a34a; color:#fff; font-size:11px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; padding:5px 12px; border-radius:14px 0 10px 0; }
+        .ck-addon h3 { margin:4px 0 10px; font-size:clamp(19px,3.4vw,22px); color:#4a0e0e; }
+        .ck-addon-line { display:flex; align-items:center; gap:10px; margin:0 0 8px; font-size:13.5px; color:#5a3a22; line-height:1.4; }
+        .ck-addon-line svg { width:18px; height:18px; flex-shrink:0; }
+        .ck-addon-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:14px; }
+        .ck-addon-foot b { font-size:clamp(22px,4vw,28px); color:var(--ink); }
+        .ck-addon-btn { border:none; cursor:pointer; padding:12px 28px; border-radius:10px; font-size:15px; font-weight:700; color:#fff5e6; background:linear-gradient(180deg,#9a1c1c,#640f0f); box-shadow:0 6px 14px rgba(110,15,15,.25); transition:transform .15s; }
+        .ck-addon-btn:hover { transform:translateY(-2px); }
+        .ck-addon-btn:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+        .ck-addon.on .ck-addon-btn { background:#fff; color:#8a1c1c; border:1.5px solid #8a1c1c; box-shadow:none; }
+        @media (max-width:480px){ .ck-addon { padding:26px 16px 16px; } }
+        .ck-sub-h { margin:22px 0 14px; font-size:clamp(17px,3vw,20px); color:#4a0e0e; }
+        .ck-sum { padding:20px 22px; }
+        .ck-sum h3 { margin:0 0 12px; font-size:19px; color:#4a0e0e; }
+        .ck-sum-row { display:flex; justify-content:space-between; gap:12px; padding:8px 0; font-size:13.5px; border-bottom:1px dashed var(--line); }
+        .ck-sum-row span:last-child { font-weight:700; white-space:nowrap; }
+        .ck-sum-row.total { border-bottom:none; padding-top:12px; font-size:16px; font-weight:800; color:#4a0e0e; }
         .ck-error { background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; border-radius:10px; padding:10px 14px; margin:16px 0 0; font-size:13.5px; }
         .ck-terms { margin:16px 0 0; text-align:center; font-size:12.5px; color:var(--muted); line-height:1.6; }
         .ck-terms a { color:var(--maroon); text-decoration:underline; text-underline-offset:2px; }
@@ -257,6 +356,7 @@ export default function CheckoutPage() {
         .ck-order-top h3 { position:relative; z-index:2; margin:0 0 14px; font-size:22px; font-weight:600; }
         .ck-tags { position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
         .ck-tag { background:var(--gold); color:#3a1a00; font-weight:700; font-size:14px; padding:7px 16px; border-radius:100px; }
+        .ck-plus { position:relative; z-index:2; display:inline-block; margin:-6px 0 14px; padding:5px 12px; border:1px solid rgba(233,178,60,.6); border-radius:8px; font-size:13px; font-weight:700; color:#ffd98a; background:rgba(0,0,0,.25); }
         .ck-ltd { font-size:12px; border:1px solid rgba(233,178,60,.6); border-radius:8px; padding:6px 10px; color:#ffd98a; }
         .ck-order-top h4 { position:relative; z-index:2; margin:0 0 18px; max-width:58%; font-family:'Playfair Display', Georgia, serif; font-size:clamp(22px,3.4vw,28px); font-weight:600; line-height:1.15; }
         .ck-order-img { position:absolute; right:0; top:58px; height:calc(100% - 58px); width:54%; max-width:none; object-fit:cover; object-position:70% center; pointer-events:none; z-index:1;
@@ -292,6 +392,35 @@ export default function CheckoutPage() {
         .ck-safe { display:flex; gap:14px; align-items:center; padding:16px 18px; border-radius:16px; background:var(--cream); border:1px solid var(--line); }
         .ck-safe strong { display:block; font-size:14px; margin-bottom:2px; }
         .ck-safe p { margin:0; font-size:12.5px; color:var(--muted); line-height:1.45; }
+
+        /* Birth time (HH : MM + AM/PM) */
+        .ck-time { display:flex; align-items:center; gap:4px; min-height:48px; padding:6px 8px 6px 14px; border:1.5px solid #ead9b8; border-radius:10px; background:#fffdf8; transition:border-color .15s, box-shadow .15s, opacity .15s; }
+        .ck-time:focus-within { border-color:#c98a1c; box-shadow:0 0 0 3px rgba(233,178,60,.2); background:#fff; }
+        .ck-time.off { opacity:.55; }
+        .ck-time input { width:3ch; min-width:0; border:none; outline:none; background:transparent; font:inherit; font-size:14.5px; color:var(--ink); text-align:center; padding:0; }
+        .ck-time input::placeholder { color:#b9a48a; }
+        .ck-time-sep { color:var(--ink); font-weight:600; }
+        .ck-ap { margin-left:auto; display:flex; gap:6px; }
+        .ck-ap button { cursor:pointer; padding:8px 14px; border:1.5px solid #ead9b8; border-radius:8px; background:#fffaf0; color:#9a7a5c; font-size:13.5px; font-weight:700; font-family:inherit; transition:background .15s, border-color .15s, color .15s; }
+        .ck-ap button.on { background:#ffe9c7; border-color:#c98a1c; color:#7a3d00; }
+        .ck-ap button:disabled { cursor:not-allowed; }
+        .ck-ap button:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+        .ck-unk { display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--muted); cursor:pointer; }
+        .ck-unk input { width:18px; height:18px; accent-color:#8a1c1c; cursor:pointer; }
+        @media (max-width:640px){ .ck-time input { font-size:16px; } }
+
+        /* Sticky pay bar */
+        .ck { padding-bottom:96px; }
+        .ck-sticky { position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(255,250,240,.96); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+          border-top:1px solid var(--line); box-shadow:0 -8px 24px rgba(120,70,10,.12);
+          padding:12px clamp(14px,3vw,30px) calc(12px + env(safe-area-inset-bottom, 0px)); }
+        .ck-sticky-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; max-width:800px; margin:0 auto; padding:19px 20px;
+          border:none; border-radius:12px; cursor:pointer; color:#fff5e6; font-size:clamp(16px,3.4vw,18px); font-weight:700;
+          font-family:'Playfair Display', Georgia, serif; background:linear-gradient(180deg,#9a1c1c,#640f0f); box-shadow:0 8px 20px rgba(110,15,15,.3); transition:transform .15s, opacity .15s; }
+        .ck-sticky-btn:hover:not(:disabled) { transform:translateY(-2px); }
+        .ck-sticky-btn:disabled { opacity:.7; cursor:not-allowed; }
+        .ck-sticky-btn { font-family:inherit; }
+        .ck-sticky-btn:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
 
         /* ── Responsive ── */
         @media (max-width:1024px){
@@ -431,11 +560,7 @@ export default function CheckoutPage() {
               </div>
               <div className="ck-row">
                 <span className="ck-ico"><Icon d={ICONS.clock} /></span>
-                <div className="ck-f">
-                  <label className="ck-lab" htmlFor="ck-time">Time of Birth <i>*</i></label>
-                  <input id="ck-time" className="ck-in" type="time" value={form.time} onChange={set('time')} />
-                  <Err message={errors.time} />
-                </div>
+                <BirthTime id="ck-time" label="Time of Birth" value={form.time} onChange={setVal('time')} error={errors.time} />
               </div>
             </div>
 
@@ -474,23 +599,85 @@ export default function CheckoutPage() {
               </div>
             </div>
 
+            <div className="ck-row two">
+              <div className="ck-row">
+                <span className="ck-ico"><Icon d={ICONS.cal} /></span>
+                <div className="ck-f">
+                  <label className="ck-lab" htmlFor="ck-cdate">Consultation Date <i>*</i></label>
+                  <input id="ck-cdate" className="ck-in" type="date" min={todayISO()} suppressHydrationWarning value={form.consultDate} onChange={set('consultDate')} />
+                  <Err message={errors.consultDate} />
+                </div>
+              </div>
+              <div className="ck-row">
+                <span className="ck-ico"><Icon d={ICONS.clock} /></span>
+                <div className="ck-f">
+                  <label className="ck-lab" htmlFor="ck-ctime">Consultation Time <i>*</i></label>
+                  <select id="ck-ctime" className="ck-in" value={form.consultTime} onChange={set('consultTime')}>
+                    <option value="">Select a time slot</option>
+                    {SLOTS.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  <Err message={errors.consultTime} />
+                </div>
+              </div>
+            </div>
+
+            {addOn && (
+              <>
+                <h3 className="ck-sub-h">Partner&apos;s Birth Details</h3>
+                <div className="ck-row">
+                  <span className="ck-ico"><Icon d={ICONS.pin} /></span>
+                  <div className="ck-f">
+                    <label className="ck-lab" htmlFor="ck-ppl">Partner Place of Birth <i>*</i></label>
+                    <input id="ck-ppl" className="ck-in" placeholder="Enter city, state, country" value={form.partnerPlace} onChange={set('partnerPlace')} autoComplete="off" />
+                    <Err message={errors.partnerPlace} />
+                  </div>
+                </div>
+                <div className="ck-row two">
+                  <div className="ck-row">
+                    <span className="ck-ico"><Icon d={ICONS.cal} /></span>
+                    <div className="ck-f">
+                      <label className="ck-lab" htmlFor="ck-pdob">Partner Date of Birth <i>*</i></label>
+                      <input id="ck-pdob" className="ck-in" type="date" value={form.partnerDob} onChange={set('partnerDob')} />
+                      <Err message={errors.partnerDob} />
+                    </div>
+                  </div>
+                  <div className="ck-row">
+                    <span className="ck-ico"><Icon d={ICONS.clock} /></span>
+                    <BirthTime id="ck-ptime" label="Partner Time of Birth" value={form.partnerTime} onChange={setVal('partnerTime')} error={errors.partnerTime} />
+                  </div>
+                </div>
+              </>
+            )}
+
             {/* Payment */}
             <div className="ck-pay-sec">
               <div className="ck-sec">
-                <span className="ck-num">2</span>
                 <div>
-                  <h2>Choose Payment Method</h2>
-                  <p>Complete your payment securely to confirm your consultation.</p>
                 </div>
               </div>
 
-              <div className="ck-method">
-                <span className="ck-radio" aria-hidden />
-                <div>
-                  <strong className="serif">Cashfree Payments</strong>
-                  <small>UPI, Cards, Net Banking, Wallets</small>
+              <div className={`ck-addon${addOn ? ' on' : ''}`}>
+                <span className="ck-addon-badge">{ADDON.badge}</span>
+                <h3>{ADDON.title}</h3>
+                <p className="ck-addon-line">
+                  <Icon d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
+                  {ADDON.desc}
+                </p>
+                <p className="ck-addon-line">
+                  <Icon d={ICONS.clock} />
+                  {ADDON.duration}
+                </p>
+                <div className="ck-addon-foot">
+                  <b>{ADDON.price}</b>
+                  <button
+                    type="button"
+                    className="ck-addon-btn"
+                    onClick={() => setAddOn((v) => !v)}
+                    aria-pressed={addOn}
+                  >
+                    {addOn ? '− Remove' : '+ Add'}
+                  </button>
                 </div>
-                <div className="ck-chips" aria-label="Accepted: UPI, Visa, Mastercard, RuPay"><span><UpiLogo /></span><span><VisaLogo /></span><span><MastercardLogo /></span><span><RupayLogo /></span></div>
               </div>
 
               {errorMsg && <div className="ck-error" role="alert">⚠️ {errorMsg}</div>}
@@ -500,10 +687,6 @@ export default function CheckoutPage() {
                 <Link href="https://www.divinearra.com/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</Link>{' '}and{' '}
                 <Link href="https://www.divinearra.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link>.
               </p>
-
-              <button className="ck-btn" onClick={handlePayment} disabled={paying}>
-                {paying ? (<><span className="ck-spin" /> Processing Payment…</>) : (<>🔒 Pay {CONSULTATION.discountedPrice} Now</>)}
-              </button>
 
               <div className="ck-trust">
                 <div><span className="ck-ico"><Icon d={ICONS.shield} /></span>100% Secure Payment</div>
@@ -523,10 +706,11 @@ export default function CheckoutPage() {
                   <span className="ck-tag">{CONSULTATION.badge}</span>
                 </div>
                 <h4>{CONSULTATION.title}</h4>
+                {addOn && <span className="ck-plus">+ {ADDON.title}</span>}
                 <img className="ck-order-img" src="/check.png" alt="" />
                 <div className="ck-price">
-                  <s>{CONSULTATION.originalPrice}</s>
-                  <b>{CONSULTATION.discountedPrice}</b>
+                  <s>{originalTotalLabel}</s>
+                  <b>{totalLabel}</b>
                 </div>
               </div>
               <div className="ck-incl">
@@ -541,9 +725,21 @@ export default function CheckoutPage() {
                     {CONSULTATION.includes.map((t) => (
                       <li key={t}><span className="ck-tick">✓</span>{t}</li>
                     ))}
+                    {addOn && (
+                      <li><span className="ck-tick">✓</span>{ADDON.title} ({ADDON.duration})</li>
+                    )}
                   </ul>
                 </div>
               </div>
+            </div>
+
+            <div className="ck-order ck-sum">
+              <h3>Payment Summary</h3>
+              <div className="ck-sum-row"><span>{CONSULTATION.title}</span><span>{CONSULTATION.discountedPrice}</span></div>
+              {addOn && (
+                <div className="ck-sum-row"><span>{ADDON.title}</span><span>{ADDON.price}</span></div>
+              )}
+              <div className="ck-sum-row total"><span>Total</span><span>{totalLabel}</span></div>
             </div>
 
             <div className="ck-order ck-bon">
@@ -569,6 +765,21 @@ export default function CheckoutPage() {
               </div>
             </div>
           </aside>
+        </div>
+
+        <div className="ck-sticky">
+          <button type="button" className="ck-sticky-btn" onClick={handlePayment} disabled={paying}>
+            {paying ? (
+              <><span className="ck-spin" /> Processing Payment…</>
+            ) : (
+              <>
+                Pay now · {totalLabel}
+                <svg viewBox="0 0 24 24" fill="none" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </>

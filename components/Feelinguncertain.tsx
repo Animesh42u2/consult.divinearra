@@ -111,9 +111,7 @@ export default function FeelingUncertain() {
     <section ref={ref} className={`feeling-uncertain ${inView ? "is-in" : ""}`}>
       <div className="fu-inner">
         <h2 className="reveal" style={{ "--i": 0 } as CSSProperties}>
-          Feeling Uncertain About
-          <br />
-          What Comes Next?
+          Feeling Uncertain About What Comes Next?
         </h2>
         <p className="sub reveal" style={{ "--i": 1 } as CSSProperties}>
           You&apos;re not alone. Many people have the same questions...
@@ -152,7 +150,7 @@ export default function FeelingUncertain() {
                 className="fu-item"
                 style={{ "--i": 2 + i } as CSSProperties}
               >
-                <span className="icon icon--gold">
+                <span className="icon icon--red">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -198,8 +196,7 @@ export default function FeelingUncertain() {
             </svg>
           </span>
           <p>
-            Instead of relying on generic predictions,
-            <br />
+            Instead of relying on generic predictions,{" "}
             <strong>understand what your own birth chart indicates.</strong>
           </p>
         </div>
@@ -238,8 +235,9 @@ export default function FeelingUncertain() {
           font-family: var(--font-playfair), serif;
           font-weight: 800;
           color: var(--deep-brown, #2b160f);
-          font-size: clamp(28px, 4.4vw, 46px);
+          font-size: clamp(22px, 3.6vw, 40px);
           line-height: 1.15;
+          text-align: center;
           margin: 0 0 14px;
           padding-bottom: 16px;
           position: relative;
@@ -247,7 +245,8 @@ export default function FeelingUncertain() {
         h2::after {
           content: "";
           position: absolute;
-          left: 0;
+          left: 50%;
+          transform: translateX(-50%);
           bottom: 0;
           height: 3px;
           width: 0;
@@ -260,6 +259,7 @@ export default function FeelingUncertain() {
         }
         .sub {
           color: #6b5a4c;
+          text-align: center;
           font-weight: 500;
           font-size: clamp(14px, 1.7vw, 18px);
           margin: 0 0 clamp(24px, 3.4vw, 36px);
@@ -336,6 +336,7 @@ export default function FeelingUncertain() {
         /* ---------- Callout ---------- */
         .fu-callout {
           display: flex;
+          justify-content: center;
           align-items: center;
           gap: clamp(14px, 2.4vw, 24px);
           background: var(--soft-cream-gold, #fff1c7);
@@ -374,8 +375,9 @@ export default function FeelingUncertain() {
         .fu-callout p {
           margin: 0;
           color: var(--royal-red);
-          font-size: clamp(14px, 1.7vw, 18px);
+          font-size: clamp(13px, 1.5vw, 17px);
           line-height: 1.6;
+          text-align: center;
         }
         .fu-callout strong {
           font-weight: 700;
@@ -397,7 +399,8 @@ export default function FeelingUncertain() {
         @media (max-width: 420px) {
           .fu-callout {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
+            text-align: center;
           }
           .icon {
             width: 36px;

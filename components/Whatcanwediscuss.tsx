@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 
 interface Topic {
@@ -75,9 +74,17 @@ const topics: Topic[] = [
       </>
     ),
   },
+  {
+    label: "Health & Wellbeing",
+    icon: <path d="M3 12h4l2-5 4 10 2-5h6" />,
+  },
 ];
 
 export default function WhatCanWeDiscuss() {
+  const scrollToConsultation = (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.getElementById("consultation")?.scrollIntoView({ behavior: "smooth" });
+  };
   const ref = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
 
@@ -139,8 +146,8 @@ export default function WhatCanWeDiscuss() {
           ))}
         </ul>
 
-        <div className="topic-cta reveal" style={{ "--i": 9 } as CSSProperties}>
-          <Link href="/checkout" className="cta-btn">
+        <div className="topic-cta reveal" style={{ "--i": 10 } as CSSProperties}>
+          <a href="#consultation" className="cta-btn" onClick={scrollToConsultation}>
             Book Your Consultation
             <svg viewBox="0 0 24 24" fill="none" width="16" height="16" aria-hidden="true">
               <path
@@ -151,7 +158,7 @@ export default function WhatCanWeDiscuss() {
                 strokeLinejoin="round"
               />
             </svg>
-          </Link>
+          </a>
         </div>
       </div>
 
@@ -209,8 +216,8 @@ export default function WhatCanWeDiscuss() {
           gap: clamp(12px, 1.8vw, 20px);
         }
         .topic-card {
-          background: rgba(0, 0, 0, 0.2);
-          border: 1px solid rgba(244, 197, 66, 0.3);
+          background: var(--soft-cream-gold);
+          border: 1px solid var(--gold);
           border-radius: 16px;
           padding: clamp(20px, 2.6vw, 32px) clamp(12px, 1.6vw, 20px);
           display: flex;
@@ -230,8 +237,8 @@ export default function WhatCanWeDiscuss() {
         }
         .is-in .topic-card:hover {
           transform: translateY(-6px);
-          border-color: var(--gold);
-          background: var(--soft-cream-gold);
+          border-color: rgba(244, 197, 66, 0.3);
+          background: rgba(0, 0, 0, 0.2);
           box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
         }
 
@@ -239,10 +246,10 @@ export default function WhatCanWeDiscuss() {
           width: clamp(48px, 5vw, 58px);
           height: clamp(48px, 5vw, 58px);
           border-radius: 50%;
-          background: var(--gold);
-          border: 1px solid var(--gold);
-          color: var(--deep-brown);
-          box-shadow: 0 8px 18px rgba(244, 197, 66, 0.22);
+          background: var(--maroon, #5c0a0a);
+          border: 1px solid var(--maroon, #5c0a0a);
+          color: var(--gold);
+          box-shadow: 0 10px 22px rgba(92, 10, 10, 0.35);
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -258,14 +265,14 @@ export default function WhatCanWeDiscuss() {
           stroke-width: 2.1;
         }
         .topic-card:hover .topic-icon {
-          background: var(--maroon, #5c0a0a);
-          border-color: var(--maroon, #5c0a0a);
-          color: var(--gold);
-          box-shadow: 0 10px 22px rgba(92, 10, 10, 0.35);
+          background: var(--gold);
+          border-color: var(--gold);
+          color: var(--deep-brown);
+          box-shadow: 0 8px 18px rgba(244, 197, 66, 0.22);
           transform: scale(1.08) rotate(-5deg);
         }
         .topic-label {
-          color: var(--cream);
+          color: var(--deep-brown);
           font-size: clamp(13px, 1.4vw, 15.5px);
           font-weight: 600;
           line-height: 1.35;
@@ -273,7 +280,7 @@ export default function WhatCanWeDiscuss() {
           transition: color 0.35s ease;
         }
         .topic-card:hover .topic-label {
-          color: var(--deep-brown);
+          color: var(--cream);
         }
 
         /* ---------- CTA button ---------- */
@@ -328,9 +335,7 @@ export default function WhatCanWeDiscuss() {
           .topic-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
-          .topic-card:last-child {
-            grid-column: 1 / -1;
-          }
+
           .topic-label {
             max-width: none;
           }

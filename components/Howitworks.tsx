@@ -372,7 +372,7 @@ export default function HowItWorks() {
         .card {
           flex: 1;
           width: 100%;
-          max-width: 340px;
+          max-width: 380px;
           text-align: center;
           padding: 2.3rem 1.5rem 1.6rem;
           border: 1.5px solid transparent;
@@ -459,14 +459,14 @@ export default function HowItWorks() {
 
         .card h3 {
           font-family: var(--font-playfair), serif;
-          font-size: clamp(16px, 2vw, 18px);
+          font-size: clamp(19px, 2.4vw, 22px);
           font-weight: 700;
           color: var(--deep-brown);
           margin: 0 0 0.6rem;
           line-height: 1.2;
         }
         .card p {
-          font-size: clamp(13px, 1.5vw, 14px);
+          font-size: clamp(14px, 1.7vw, 16px);
           color: var(--maroon);
           opacity: 0.8;
           line-height: 1.7;

@@ -10,22 +10,28 @@ type Testimonial = {
 
 const testimonials: Testimonial[] = [
   {
-    name: "Priya S.",
-    image: "/priya.jpeg",
+    name: "Swikruti Mishra",
+    image: "/Swikruti.jpeg",
     quote:
       "The consultation gave me clarity about my career and helped me see things from a new perspective.",
   },
   {
-    name: "Arjun R.",
-    image: "/Arjun.jpeg",
+    name: "Animesh Mohapatra",
+    image: "/animesh.jpg",
     quote:
       "It felt like a real conversation about my life, not a generic horoscope. Highly recommended.",
   },
   {
-    name: "Meera K.",
-    image: "/meera.jpeg",
+    name: "Dr. Kamal Panda",
+    image: "/Kamal.jpeg",
     quote:
-      "Simple, clear and practical guidance. I could openly discuss my questions.",
+      "My questions about timing and big decisions were answered with patience and honesty. No fear, just clear direction.",
+  },
+  {
+    name: "Manisha Padhi",
+    image: "/manisha.jpeg",
+    quote:
+      "I felt heard from the first minute. The remedies suggested were simple and easy to follow in daily life.",
   },
 ];
 
@@ -65,70 +71,94 @@ export default function Testimonials() {
           What People Say
         </h2>
 
-        <div className="testimonial-grid">
-          {testimonials.map((t) => (
-            <article key={t.name} className="testimonial-card">
-              <span aria-hidden className="testimonial-quote-mark">
-                &rdquo;
-              </span>
+        <div className="marquee">
+          <div className="marquee-track">
+            {[...testimonials, ...testimonials].map((t, idx) => (
+              <article
+                key={`${t.name}-${idx}`}
+                className="testimonial-card"
+                aria-hidden={idx >= testimonials.length}
+              >
+                <span aria-hidden className="testimonial-quote-mark">
+                  &rdquo;
+                </span>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-                <div className="testimonial-avatar-ring">
-                  <Image
-                    src={t.image}
-                    alt={t.name}
-                    width={56}
-                    height={56}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      display: "block",
-                      border: "2px solid var(--cream)",
-                    }}
-                  />
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <p
-                    style={{
-                      fontWeight: 600,
-                      fontSize: "clamp(14px, 1.6vw, 15px)",
-                      color: "var(--deep-brown)",
-                      margin: 0,
-                      overflowWrap: "break-word",
-                    }}
-                  >
-                    {t.name}
-                  </p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                    <span
+                <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+                  <div className="testimonial-avatar-ring">
+                    <Image
+                      src={t.image}
+                      alt={t.name}
+                      width={56}
+                      height={56}
                       style={{
-                        color: "var(--gold)",
-                        letterSpacing: 1,
-                        fontSize: 13,
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        display: "block",
+                        border: "2px solid var(--cream)",
+                      }}
+                    />
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <p
+                      style={{
+                        fontWeight: 600,
+                        fontSize: "clamp(14px, 1.6vw, 15px)",
+                        color: "var(--deep-brown)",
+                        margin: 0,
+                        overflowWrap: "break-word",
                       }}
                     >
-                      ★★★★★
-                    </span>
-                    <span style={{ fontSize: 11.5, color: "var(--maroon)" }}>
-                      Verified Client
-                    </span>
+                      {t.name}
+                    </p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                      <span
+                        style={{
+                          color: "var(--gold)",
+                          letterSpacing: 1,
+                          fontSize: 13,
+                        }}
+                      >
+                        ★★★★★
+                      </span>
+                      <span style={{ fontSize: 11.5, color: "var(--maroon)" }}>
+                        Verified Client
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <p className="testimonial-quote-text">&ldquo;{t.quote}&rdquo;</p>
-            </article>
-          ))}
+                <p className="testimonial-quote-text">&ldquo;{t.quote}&rdquo;</p>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
 
       <style>{`
-        .testimonial-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: clamp(16px, 2.5vw, 24px);
+        .marquee {
+          overflow: hidden;
+          padding: 8px 0 20px;
+          -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+        }
+        .marquee-track {
+          display: flex;
+          gap: 24px;
+          width: max-content;
+          animation: testimonial-scroll 45s linear infinite;
+        }
+        .marquee:hover .marquee-track {
+          animation-play-state: paused;
+        }
+        @keyframes testimonial-scroll {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(calc(-50% - 12px));
+          }
         }
 
         .testimonial-card {
@@ -140,7 +170,8 @@ export default function Testimonials() {
           display: flex;
           flex-direction: column;
           gap: 14px;
-          min-width: 0;
+          flex: 0 0 auto;
+          width: clamp(270px, 30vw, 340px);
           transition: transform 0.2s ease, box-shadow 0.2s ease;
           box-shadow: 0 2px 10px rgba(43, 22, 15, 0.06);
         }
@@ -179,8 +210,8 @@ export default function Testimonials() {
         }
 
         @media (max-width: 520px) {
-          .testimonial-grid {
-            grid-template-columns: 1fr;
+          .testimonial-card {
+            width: 80vw;
           }
           .testimonial-avatar-ring {
             width: 48px;
@@ -191,6 +222,8 @@ export default function Testimonials() {
         @media (prefers-reduced-motion: reduce) {
           .testimonial-card { transition: none; }
           .testimonial-card:hover { transform: none; }
+          .marquee-track { animation: none; }
+          .marquee { overflow-x: auto; }
         }
       `}</style>
     </section>
