@@ -96,7 +96,7 @@ export default function WhyChooseUs() {
           </p>
           <p className="desc reveal" style={{ "--i": 2 } as CSSProperties}>
             At Divine Arra, astrology is more than predictions — it&apos;s a
-            traditional system of guidance and self-understanding. Your
+            traditional system of guidance and    <span style={{ whiteSpace: "nowrap" }}>self-understanding</span>. Your
             consultation is based on your unique birth chart, not a
             one-size-fits-all reading.
           </p>
@@ -147,8 +147,8 @@ export default function WhyChooseUs() {
       <style jsx>{`
         .why {
           background: var(--cream);
-          border-top: 1px solid rgba(43, 22, 15, 0.08);
-          border-bottom: 1px solid rgba(43, 22, 15, 0.08);
+          border-top: none;
+          border-bottom: none;
           padding: clamp(40px, 6vw, 72px) clamp(20px, 6vw, 6vw);
           overflow-x: hidden;
         }

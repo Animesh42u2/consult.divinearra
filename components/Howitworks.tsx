@@ -63,6 +63,9 @@ const steps: StepItem[] = [
 // When the travelling arrow reaches each badge (seconds into the 4s loop)
 const pingDelays = ["0.1s", "1.9s", "3.4s"];
 
+// Mobile only: when the arrow starts travelling down each connector
+const connectorDelays = ["1.15s", "2.65s"];
+
 export default function HowItWorks() {
   const innerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -131,12 +134,20 @@ export default function HowItWorks() {
                   {i + 1}
                 </div>
 
+                {/* Mobile only: vertical connector with a travelling arrow */}
+                {i < steps.length - 1 && (
+                  <span className="connector" aria-hidden="true">
+                    <span
+                      className="travel"
+                      style={{ "--cd": connectorDelays[i] } as CSSProperties}
+                    />
+                  </span>
+                )}
+
                 <div className="card">
+                  {/* LEFT: icon */}
                   <div className="icon-wrap">
-                    <span className="dash-ring" />
-                    <span className="sparkle" style={{ top: 2, left: 6 }}>✦</span>
-                    <span className="sparkle" style={{ bottom: 4, right: 2, fontSize: 8 }}>✦</span>
-                    <span className="sparkle" style={{ top: 10, right: -2, fontSize: 7 }}>✦</span>
+                    <span className="ring" />
                     <div className="icon-circle">
                       <svg viewBox="0 0 24 24" fill="none">
                         {s.icon}
@@ -144,19 +155,10 @@ export default function HowItWorks() {
                     </div>
                   </div>
 
-                  <div className="divider">
-                    <span className="divider-line" />
-                    <span className="divider-icon">❖</span>
-                    <span className="divider-line" />
-                  </div>
-
-                  <h3>{s.title}</h3>
-                  <p>{s.desc}</p>
-
-                  <div className="flourish">
-                    <span className="flourish-line" />
-                    <span className="flourish-icon">❧</span>
-                    <span className="flourish-line" />
+                  {/* RIGHT: content */}
+                  <div className="content">
+                    <h3>{s.title}</h3>
+                    <p>{s.desc}</p>
                   </div>
                 </div>
               </div>
@@ -325,6 +327,11 @@ export default function HowItWorks() {
           transform: translateY(0);
         }
 
+        /* Mobile-only connector: hidden on desktop */
+        .connector {
+          display: none;
+        }
+
         .badge {
           position: absolute;
           top: 17px;
@@ -368,51 +375,48 @@ export default function HowItWorks() {
           }
         }
 
-        /* ---------- Card ---------- */
+        /* ---------- Card: pill box, icon on the left, content on the right ---------- */
         .card {
           flex: 1;
           width: 100%;
           max-width: 380px;
-          text-align: center;
-          padding: 2.3rem 1.5rem 1.6rem;
-          border: 1.5px solid transparent;
-          border-radius: 18px;
-          background-image: linear-gradient(165deg, #fffdf9 0%, var(--soft-cream-gold) 100%),
-            linear-gradient(135deg, var(--gold) 0%, var(--royal-red) 50%, var(--gold) 100%);
-          background-origin: border-box;
-          background-clip: padding-box, border-box;
-          box-shadow: 0 1px 2px rgba(43, 22, 15, 0.04), 0 12px 28px rgba(43, 22, 15, 0.07);
-          transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+          display: flex;
+          align-items: center;
+          gap: clamp(12px, 1.6vw, 18px);
+          text-align: left;
+          padding: clamp(14px, 1.8vw, 20px) clamp(18px, 2.2vw, 28px) clamp(14px, 1.8vw, 20px)
+            clamp(14px, 1.8vw, 20px);
+          border: 1px solid rgba(196, 143, 44, 0.28);
+          border-radius: 64px;
+          background: linear-gradient(165deg, #fffdf9 0%, rgba(255, 244, 220, 0.75) 100%);
+          box-shadow: 0 1px 2px rgba(43, 22, 15, 0.03), 0 10px 26px rgba(43, 22, 15, 0.06);
+          transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease,
+            border-color 0.35s ease;
         }
         .step:hover .card {
-          transform: translateY(-8px);
-          box-shadow: 0 4px 10px rgba(43, 22, 15, 0.06), 0 24px 48px rgba(139, 0, 0, 0.15);
+          transform: translateY(-6px);
+          border-color: rgba(196, 143, 44, 0.6);
+          box-shadow: 0 4px 10px rgba(43, 22, 15, 0.05), 0 18px 38px rgba(139, 0, 0, 0.12);
         }
 
+        /* Left icon */
         .icon-wrap {
           position: relative;
-          width: 96px;
-          height: 96px;
-          margin: 0.5rem auto 0.9rem;
+          flex: 0 0 auto;
+          width: clamp(72px, 8vw, 92px);
+          height: clamp(72px, 8vw, 92px);
         }
-        .dash-ring {
+        .ring {
           position: absolute;
           inset: 0;
           border-radius: 50%;
-          border: 1.5px dashed rgba(196, 143, 44, 0.8);
-          animation: spin 22s linear infinite;
-        }
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
+          border: 3px solid var(--gold);
+          border-right-color: var(--royal-red);
+          border-bottom-color: var(--royal-red);
         }
         .icon-circle {
           position: absolute;
-          inset: 10px;
+          inset: 6px;
           border-radius: 50%;
           background: radial-gradient(circle at 35% 30%, var(--royal-red) 0%, var(--maroon) 100%);
           display: flex;
@@ -421,59 +425,38 @@ export default function HowItWorks() {
           box-shadow: 0 6px 14px rgba(92, 10, 10, 0.3);
         }
         .icon-circle svg {
-          width: 40px;
-          height: 40px;
+          width: 44%;
+          height: 44%;
           color: var(--gold);
         }
-        .sparkle {
-          position: absolute;
-          color: var(--gold);
-          font-size: 10px;
-          opacity: 0.85;
-        }
 
-        .divider,
-        .flourish {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.4rem;
+        /* Right content */
+        .content {
+          min-width: 0;
+          flex: 1;
         }
-        .divider {
-          margin: 0.2rem 0 0.8rem;
-        }
-        .divider-line,
-        .flourish-line {
-          width: 30px;
-          height: 1px;
-          background: rgba(196, 143, 44, 0.7);
-        }
-        .divider-icon,
-        .flourish-icon {
-          color: var(--royal-red);
-          font-size: 0.65rem;
-        }
-        .flourish-icon {
-          font-size: 0.85rem;
-        }
-
-        .card h3 {
-          font-family: var(--font-playfair), serif;
-          font-size: clamp(19px, 2.4vw, 22px);
+        .content h3 {
+          font-size: clamp(16px, 1.7vw, 19px);
           font-weight: 700;
           color: var(--deep-brown);
-          margin: 0 0 0.6rem;
+          margin: 0 0 4px;
           line-height: 1.2;
         }
-        .card p {
-          font-size: clamp(14px, 1.7vw, 16px);
-          color: var(--maroon);
+        .content p {
+          font-size: clamp(12.5px, 1.2vw, 14px);
+          color: var(--deep-brown);
           opacity: 0.8;
-          line-height: 1.7;
-          margin: 0 0 1rem;
+          line-height: 1.5;
+          margin: 0;
         }
 
         /* ---------- Responsive ---------- */
+        @media (max-width: 1024px) {
+          .card {
+            border-radius: 48px;
+          }
+        }
+
         @media (max-width: 768px) {
           .steps {
             grid-template-columns: 1fr;
@@ -481,15 +464,84 @@ export default function HowItWorks() {
             max-width: 400px;
             margin: 0 auto;
           }
+
+          /* Desktop horizontal line + arrow stay hidden on mobile */
           .line,
           .arrow-wrap {
             display: none;
           }
-          .hiw-inner.is-visible .badge {
-            animation: none;
-          }
+
+          /* Card sits above the connector, so it needs a solid background */
           .card {
+            position: relative;
+            z-index: 1;
             max-width: none;
+            border-radius: 40px;
+            background: linear-gradient(165deg, #fffdf9 0%, #fff4dc 100%);
+          }
+          .content p {
+            font-size: 14px;
+          }
+
+          /* Vertical line from this badge down to the next badge */
+          .connector {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 17px;
+            width: 1.5px;
+            height: calc(100% + 2.5rem);
+            transform: translateX(-50%);
+            background: linear-gradient(
+              180deg,
+              rgba(196, 143, 44, 0.65),
+              rgba(196, 143, 44, 0.65)
+            );
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease 0.3s;
+            pointer-events: none;
+          }
+          .hiw-inner.is-visible .connector {
+            opacity: 1;
+          }
+
+          /* Arrow travelling down the connector */
+          .travel {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 11px;
+            height: 11px;
+            border-right: 2.6px solid var(--royal-red);
+            border-bottom: 2.6px solid var(--royal-red);
+            border-radius: 1px;
+            transform: translate(-50%, -50%) rotate(45deg);
+            filter: drop-shadow(0 2px 5px rgba(92, 10, 10, 0.45));
+            opacity: 0;
+          }
+          .hiw-inner.is-visible .travel {
+            animation: arrow-down 4s cubic-bezier(0.45, 0, 0.55, 1) var(--cd, 1s) infinite;
+          }
+          @keyframes arrow-down {
+            0% {
+              top: 0;
+              opacity: 0;
+            }
+            6% {
+              opacity: 1;
+            }
+            40% {
+              opacity: 1;
+            }
+            44% {
+              top: 100%;
+              opacity: 0;
+            }
+            100% {
+              top: 100%;
+              opacity: 0;
+            }
           }
         }
 
@@ -499,16 +551,18 @@ export default function HowItWorks() {
           .step,
           .line,
           .card,
-          .badge {
+          .badge,
+          .connector {
             transition: none;
           }
-          .dash-ring,
           .arrow-glow,
           .hiw-inner.is-visible .arrow-wrap,
-          .hiw-inner.is-visible .badge {
+          .hiw-inner.is-visible .badge,
+          .hiw-inner.is-visible .travel {
             animation: none;
           }
-          .arrow-wrap {
+          .arrow-wrap,
+          .travel {
             display: none;
           }
         }
